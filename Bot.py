@@ -1,9 +1,13 @@
 import discord
 import random
+import os
 
-client = discord.Client()
-with open ("key.txt", "r") as myfile:
-    authkey=myfile.read()
+intents = discord.Intents.default()
+intents.members = True
+client = discord.Client(intents = intents)
+authkey=os.getenv("discordkey")
+m_list =open('mlist.txt').readlines()
+r_list = open('rlist.txt').readlines()
 
 @client.event
 async def on_ready():
@@ -21,7 +25,10 @@ async def on_message(message):
         color = users[num].color
         role = message.guild.get_role(users[num].top_role.id)
         if role.permissions.administrator:
-            await  message.channel.send("Ahoy! @" + str(users[num]) + "that will have to be a negatory me boy!")
+            print("is admin")
+            role = message.guild.get_role(users[num].roles[-2].id)
+            await  message.channel.send("Ahoy! @" + str(users[num]) + "not even an Admin can avoid the Krabs Rainbow Beam")
+            await colorChange(role, color)
         else:
             await  message.channel.send("Ahoy! @" + str(users[num]) + " me boy! You are now rainbow! AGHAHAHAHAHAHA")
             await colorChange(role, color)
@@ -30,6 +37,11 @@ async def on_message(message):
         if not role.permissions.administrator:
             await  message.channel.send("Ahoy! " + str(message.author.nick) + " you have color! AGHAHAHAHAHAHAHHAHA")
             await colorChange(role, color)
+        else:
+            print("is admin")
+            role = message.guild.get_role(message.author.roles[-2].id)
+            await  message.channel.send("Ahoy! @" + str(message.author) + "not even an Admin can avoid the Krabs Rainbow Beam")
+            await colorChange(role, color)
     if message.content == "!palu":
         emoji = discord.utils.get(client.emojis, name = "beamend")
         await message.channel.send(emoji)
@@ -37,6 +49,13 @@ async def on_message(message):
             await message.channel.send(discord.utils.get(client.emojis, name = "beam"))
         await message.channel.send(discord.utils.get(client.emojis, name = "palu2"))
         await message.channel.send(discord.utils.get(client.emojis, name = "palu1"))
+    if message.content == "!brian":
+        print(message.guild.roles)
+        m_word = random.choice(m_list)
+        r_word = random.choice(r_list)
+        await message.channel.send(m_word + r_word)
+    if "based" in message.content:
+        await message.channel.send("https://open.spotify.com/track/2TogYEdCs90G87y97bOILl?si=PbhZGp-QR3SiWzlrRWyYfg")
     if message.content == "end" and role.permissions.administrator:
         print("Bye")
         exit(0)
