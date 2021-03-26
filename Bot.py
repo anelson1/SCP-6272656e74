@@ -1,11 +1,12 @@
 import discord
 import random
 import os
+import asyncio
 
 intents = discord.Intents.default()
 intents.members = True
 client = discord.Client(intents = intents)
-authkey=os.getenv("discordkey")
+authkey=os.getenv("botkey")
 m_list =open('mlist.txt').readlines()
 r_list = open('rlist.txt').readlines()
 
@@ -27,21 +28,23 @@ async def on_message(message):
         if role.permissions.administrator:
             print("is admin")
             role = message.guild.get_role(users[num].roles[-2].id)
-            await  message.channel.send("Ahoy! @" + str(users[num]) + "not even an Admin can avoid the Krabs Rainbow Beam")
+            await  message.channel.send("Greetings! @" + str(users[num]) + ". The council of wurk has deemed you unworthy.")
             await colorChange(role, color)
         else:
-            await  message.channel.send("Ahoy! @" + str(users[num]) + " me boy! You are now rainbow! AGHAHAHAHAHAHA")
+            await  message.channel.send("Greetings! @" + str(users[num]) + ". The council of wurk has deemed you unworthy.")
             await colorChange(role, color)
     elif "!rainbow" in message.content:
         color = message.author.color
         if not role.permissions.administrator:
-            await  message.channel.send("Ahoy! " + str(message.author.nick) + " you have color! AGHAHAHAHAHAHAHHAHA")
+            await  message.channel.send("Hello! " + str(message.author.nick) + " The council of wurk has deemed you unworthy.")
             await colorChange(role, color)
         else:
             print("is admin")
             role = message.guild.get_role(message.author.roles[-2].id)
-            await  message.channel.send("Ahoy! @" + str(message.author) + "not even an Admin can avoid the Krabs Rainbow Beam")
+            print("Role is : " + str(role))
+            await  message.channel.send("Ahoy! @" + str(message.author) + " The council of wurk has deemed you unworthy.")
             await colorChange(role, color)
+            print("Done")
     if message.content == "!palu":
         emoji = discord.utils.get(client.emojis, name = "beamend")
         await message.channel.send(emoji)
@@ -65,6 +68,7 @@ async def colorChange(role, color):
     g = 0
     b = 0
     for i in range(100):
+        print(r, g ,b)
         if r == 255 and b == 0 and g != 255:
             g+=51
         elif g == 255 and r != 0:
@@ -77,7 +81,7 @@ async def colorChange(role, color):
             r+=51
         elif r==255 and b != 0:
             b-=51
-        await role.edit(colour = discord.Colour.from_rgb(r,g,b))
+        await role.edit(colour = discord.Color.from_rgb(r,g,b))
     await role.edit(colour=color)
 
 
