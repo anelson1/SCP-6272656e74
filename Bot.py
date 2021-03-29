@@ -1,8 +1,10 @@
 import discord
 import random
 import os
+#import opuslib
+import nacl
+import ffmpeg
 import asyncio
-
 intents = discord.Intents.default()
 intents.members = True
 client = discord.Client(intents = intents)
@@ -12,7 +14,7 @@ r_list = open('rlist.txt').readlines()
 
 @client.event
 async def on_ready():
-    print("Ahoy!")
+    print("Ni-")
 
 
 @client.event
@@ -28,21 +30,21 @@ async def on_message(message):
         if role.permissions.administrator:
             print("is admin")
             role = message.guild.get_role(users[num].roles[-2].id)
-            await  message.channel.send("Greetings! @" + str(users[num]) + ". The council of wurk has deemed you unworthy.")
+            await  message.channel.send(str(users[num]) + "is now based!")
             await colorChange(role, color)
         else:
-            await  message.channel.send("Greetings! @" + str(users[num]) + ". The council of wurk has deemed you unworthy.")
+            await  message.channel.send(str(users[num]) + "is now based!")
             await colorChange(role, color)
     elif "!rainbow" in message.content:
         color = message.author.color
         if not role.permissions.administrator:
-            await  message.channel.send("Hello! " + str(message.author.nick) + " The council of wurk has deemed you unworthy.")
+            await  message.channel.send("Hello! " + str(message.author.nick) + ", you're now based!")
             await colorChange(role, color)
         else:
             print("is admin")
             role = message.guild.get_role(message.author.roles[-2].id)
             print("Role is : " + str(role))
-            await  message.channel.send("Ahoy! @" + str(message.author) + " The council of wurk has deemed you unworthy.")
+            await  message.channel.send("@" + str(message.author) + "is based!")
             await colorChange(role, color)
             print("Done")
     if message.content == "!palu":
@@ -59,6 +61,25 @@ async def on_message(message):
         await message.channel.send(m_word + r_word)
     if "based" in message.content:
         await message.channel.send("https://open.spotify.com/track/2TogYEdCs90G87y97bOILl?si=PbhZGp-QR3SiWzlrRWyYfg")
+        try:
+            VC = message.author.voice.channel
+            connection = await VC.connect(timeout = 10)
+            connection.play(discord.FFmpegPCMAudio(executable="C:/ffmpeg/bin/ffmpeg.exe", source="shortbased.mp3"))
+            while connection.is_playing():
+                await asyncio.sleep(.1)
+            await connection.disconnect()
+        except:
+            print("not in call")
+    if message.content == "!Based":
+        try:
+            VC = message.author.voice.channel
+            connection = await VC.connect(timeout = 10)
+            connection.play(discord.FFmpegPCMAudio(executable="C:/ffmpeg/bin/ffmpeg.exe", source="based.mp3"))
+            while connection.is_playing():
+                await asyncio.sleep(.1)
+            await connection.disconnect()
+        except:
+            await message.channel.send("Try being in a voice call next time dumbass")       
     if message.content == "end" and role.permissions.administrator:
         print("Bye")
         exit(0)
