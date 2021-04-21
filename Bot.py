@@ -5,13 +5,32 @@ import os
 import nacl
 import ffmpeg
 import asyncio
+import cv2
+import numpy as np
 intents = discord.Intents.default()
 intents.members = True
 client = discord.Client(intents = intents)
 authkey=os.getenv("botkey")
 m_list =open('mlist.txt').readlines()
 r_list = open('rlist.txt').readlines()
-
+def get_optimal_font_scale(text, width):
+    for scale in reversed(range(0, 60, 1)):
+        textSize = cv2.getTextSize(text, fontFace=cv2.FONT_HERSHEY_DUPLEX, fontScale=scale/10, thickness=5)
+        new_width = textSize[0][0]
+        #print(new_width)
+        if (new_width <= width):
+            return scale/10
+    return 1
+def find_space(text):
+    midpoint = int(len(text)/2)
+    print(midpoint, text[midpoint])
+    if text[midpoint] != ' ':
+        for i in text[int(len(text)/2)::]:
+            print(i)
+            if i == ' ':
+                return midpoint
+            midpoint+=1
+    return midpoint
 @client.event
 async def on_ready():
     print("Ni-")
@@ -19,6 +38,31 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    check = random.randint(1,100)
+    print("Random Number is: " + str(check))
+    if check == 1:
+        text = message.content
+        midpoint = find_space(text)
+        text1 = text[0:midpoint]
+        text2 = text[midpoint+1::]
+        numimages = os.listdir("images")
+        image = cv2.imread("images/"+str(random.randint(1,len(numimages)))+'.png', cv2.IMREAD_UNCHANGED)
+        height = image.shape[0]
+        width = image.shape[1]
+        if height < width:
+            landscape = True
+        fontscale1 = get_optimal_font_scale(text1,width)
+        fontscale2 = get_optimal_font_scale(text2,width)
+        textsize1 = cv2.getTextSize(text1,cv2.FONT_HERSHEY_DUPLEX,fontscale1,5)
+        textwidth1 = textsize1[0][0]
+        textheight1 = textsize1[0][1]
+        textsize2 = cv2.getTextSize(text2,cv2.FONT_HERSHEY_DUPLEX,fontscale2,5)
+        textwidth2 = textsize2[0][0]
+        textheight2 = textsize2[0][1]
+        cv2.putText(image, text1,(int((width/2)-(textwidth1/2)),(int((height/10) - (textheight1/10)))+int(1.4*textsize1[1])),cv2.FONT_HERSHEY_DUPLEX,fontscale1,(255,255,255,255),5)
+        cv2.putText(image, text2,(int((width/2)-(textwidth2/2)),(int((9*height/10) + (9*textheight2/10)))-int(1.4*textsize2[1])),cv2.FONT_HERSHEY_DUPLEX,fontscale2,(255,255,255,255),5)
+        cv2.imwrite('output.png', image)   
+        await message.channel.send(file=discord.File('output.png')) 
     role = message.guild.get_role(message.author.top_role.id)
     if message.author == client.user:
         return
