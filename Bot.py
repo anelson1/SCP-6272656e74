@@ -31,6 +31,28 @@ def find_space(text):
                 return midpoint
             midpoint+=1
     return midpoint
+def shitpost(message):
+    text = message
+    midpoint = find_space(text)
+    text1 = text[0:midpoint]
+    text2 = text[midpoint+1::]
+    numimages = os.listdir("images")
+    image = cv2.imread("images/"+str(random.randint(1,len(numimages)))+'.png', cv2.IMREAD_UNCHANGED)
+    height = image.shape[0]
+    width = image.shape[1]
+    if height < width:
+        landscape = True
+    fontscale1 = get_optimal_font_scale(text1,width)
+    fontscale2 = get_optimal_font_scale(text2,width)
+    textsize1 = cv2.getTextSize(text1,cv2.FONT_HERSHEY_DUPLEX,fontscale1,5)
+    textwidth1 = textsize1[0][0]
+    textheight1 = textsize1[0][1]
+    textsize2 = cv2.getTextSize(text2,cv2.FONT_HERSHEY_DUPLEX,fontscale2,5)
+    textwidth2 = textsize2[0][0]
+    textheight2 = textsize2[0][1]
+    cv2.putText(image, text1,(int((width/2)-(textwidth1/2)),(int((height/10) - (textheight1/10)))+int(1.4*textsize1[1])),cv2.FONT_HERSHEY_DUPLEX,fontscale1,(255,255,255,255),5)
+    cv2.putText(image, text2,(int((width/2)-(textwidth2/2)),(int((9*height/10) + (9*textheight2/10)))-int(1.4*textsize2[1])),cv2.FONT_HERSHEY_DUPLEX,fontscale2,(255,255,255,255),5)
+    cv2.imwrite('output.png', image)
 @client.event
 async def on_ready():
     print("Ni-")
@@ -41,31 +63,16 @@ async def on_message(message):
     check = random.randint(1,100)
     print("Random Number is: " + str(check))
     if check == 1:
-        text = message.content
-        midpoint = find_space(text)
-        text1 = text[0:midpoint]
-        text2 = text[midpoint+1::]
-        numimages = os.listdir("images")
-        image = cv2.imread("images/"+str(random.randint(1,len(numimages)))+'.png', cv2.IMREAD_UNCHANGED)
-        height = image.shape[0]
-        width = image.shape[1]
-        if height < width:
-            landscape = True
-        fontscale1 = get_optimal_font_scale(text1,width)
-        fontscale2 = get_optimal_font_scale(text2,width)
-        textsize1 = cv2.getTextSize(text1,cv2.FONT_HERSHEY_DUPLEX,fontscale1,5)
-        textwidth1 = textsize1[0][0]
-        textheight1 = textsize1[0][1]
-        textsize2 = cv2.getTextSize(text2,cv2.FONT_HERSHEY_DUPLEX,fontscale2,5)
-        textwidth2 = textsize2[0][0]
-        textheight2 = textsize2[0][1]
-        cv2.putText(image, text1,(int((width/2)-(textwidth1/2)),(int((height/10) - (textheight1/10)))+int(1.4*textsize1[1])),cv2.FONT_HERSHEY_DUPLEX,fontscale1,(255,255,255,255),5)
-        cv2.putText(image, text2,(int((width/2)-(textwidth2/2)),(int((9*height/10) + (9*textheight2/10)))-int(1.4*textsize2[1])),cv2.FONT_HERSHEY_DUPLEX,fontscale2,(255,255,255,255),5)
-        cv2.imwrite('output.png', image)   
+        shitpost(message.content)   
         await message.channel.send(file=discord.File('output.png')) 
     role = message.guild.get_role(message.author.top_role.id)
     if message.author == client.user:
         return
+    if "!shitpost" in message.content:
+        text = message.content[10::]
+        shitpost(text)
+        await message.channel.send(file=discord.File('output.png')) 
+
     if message.content == "!rr":
         users = message.guild.members
         num = random.randint(0,len(users))
