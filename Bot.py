@@ -50,10 +50,10 @@ def shitpost(message):
     textsize2 = cv2.getTextSize(text2,cv2.FONT_HERSHEY_DUPLEX,fontscale2,5)
     textwidth2 = textsize2[0][0]
     textheight2 = textsize2[0][1]
-    cv2.putText(image, text1,(int((width/2)-(textwidth1/2)),(int((height/10) - (textheight1/10)))+int(1.4*textsize1[1])),cv2.FONT_HERSHEY_DUPLEX,fontscale1,(0,0,0,255),20)
-    cv2.putText(image, text1,(int((width/2)-(textwidth1/2)),(int((height/10) - (textheight1/10)))+int(1.4*textsize1[1])),cv2.FONT_HERSHEY_DUPLEX,fontscale1,(255,255,255,255),5)
-    cv2.putText(image, text2,(int((width/2)-(textwidth2/2)),(int((9*height/10) + (9*textheight2/10)))-int(1.4*textsize2[1])),cv2.FONT_HERSHEY_DUPLEX,fontscale2,(0,0,0,255),20)
-    cv2.putText(image, text2,(int((width/2)-(textwidth2/2)),(int((9*height/10) + (9*textheight2/10)))-int(1.4*textsize2[1])),cv2.FONT_HERSHEY_DUPLEX,fontscale2,(255,255,255,255),5)
+    cv2.putText(image, text1,(int((width/2)-(textwidth1/2)),(int((height/10) - (textheight1/10)))+int(1.1*textsize1[1])),cv2.FONT_HERSHEY_DUPLEX,fontscale1,(0,0,0,255),10)
+    cv2.putText(image, text1,(int((width/2)-(textwidth1/2)),(int((height/10) - (textheight1/10)))+int(1.1*textsize1[1])),cv2.FONT_HERSHEY_DUPLEX,fontscale1,(255,255,255,255),2)
+    cv2.putText(image, text2,(int((width/2)-(textwidth2/2)),(int((8.5*height/10) + (8.5*textheight2/10)))-int(textsize2[1])),cv2.FONT_HERSHEY_DUPLEX,fontscale2,(0,0,0,255),10)
+    cv2.putText(image, text2,(int((width/2)-(textwidth2/2)),(int((8.5*height/10) + (8.5*textheight2/10)))-int(textsize2[1])),cv2.FONT_HERSHEY_DUPLEX,fontscale2,(255,255,255,255),2)
     cv2.imwrite('output.png', image)
 @client.event
 async def on_ready():
