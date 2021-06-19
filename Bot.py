@@ -7,7 +7,7 @@ import ffmpeg
 import asyncio
 import cv2
 import numpy as np
-from memegenerator import memegenerator as meme
+import meme
 intents = discord.Intents.default()
 intents.members = True
 client = discord.Client(intents = intents)
