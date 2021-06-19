@@ -7,6 +7,7 @@ import ffmpeg
 import asyncio
 import cv2
 import numpy as np
+from memegenerator import memegenerator as meme
 intents = discord.Intents.default()
 intents.members = True
 client = discord.Client(intents = intents)
@@ -38,23 +39,7 @@ def shitpost(message):
     text2 = text[midpoint+1::]
     numimages = os.listdir("images")
     image = cv2.imread("images/"+str(random.randint(1,len(numimages)))+'.png', cv2.IMREAD_UNCHANGED)
-    height = image.shape[0]
-    width = image.shape[1]
-    if height < width:
-        landscape = True
-    fontscale1 = get_optimal_font_scale(text1,width)
-    fontscale2 = get_optimal_font_scale(text2,width)
-    textsize1 = cv2.getTextSize(text1,cv2.FONT_HERSHEY_DUPLEX,fontscale1,5)
-    textwidth1 = textsize1[0][0]
-    textheight1 = textsize1[0][1]
-    textsize2 = cv2.getTextSize(text2,cv2.FONT_HERSHEY_DUPLEX,fontscale2,5)
-    textwidth2 = textsize2[0][0]
-    textheight2 = textsize2[0][1]
-    cv2.putText(image, text1,(int((width/2)-(textwidth1/2)),(int((height/10) - (textheight1/10)))+int(1.1*textsize1[1])),cv2.FONT_HERSHEY_DUPLEX,fontscale1,(0,0,0,255),10)
-    cv2.putText(image, text1,(int((width/2)-(textwidth1/2)),(int((height/10) - (textheight1/10)))+int(1.1*textsize1[1])),cv2.FONT_HERSHEY_DUPLEX,fontscale1,(255,255,255,255),2)
-    cv2.putText(image, text2,(int((width/2)-(textwidth2/2)),(int((8.5*height/10) + (8.5*textheight2/10)))-int(textsize2[1])),cv2.FONT_HERSHEY_DUPLEX,fontscale2,(0,0,0,255),10)
-    cv2.putText(image, text2,(int((width/2)-(textwidth2/2)),(int((8.5*height/10) + (8.5*textheight2/10)))-int(textsize2[1])),cv2.FONT_HERSHEY_DUPLEX,fontscale2,(255,255,255,255),2)
-    cv2.imwrite('output.png', image)
+    meme.make_meme(text1, text2,image)
 @client.event
 async def on_ready():
     print("Ni-")
@@ -66,7 +51,7 @@ async def on_message(message):
     print("Random Number is: " + str(check))
     if check == 1:
         shitpost(message.content)   
-        await message.channel.send(file=discord.File('output.png')) 
+        await message.channel.send(file=discord.File('temp.png')) 
     role = message.guild.get_role(message.author.top_role.id)
     if message.author == client.user:
         return
