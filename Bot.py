@@ -38,7 +38,7 @@ def shitpost(message):
     text1 = text[0:midpoint]
     text2 = text[midpoint+1::]
     numimages = os.listdir("images")
-    image = cv2.imread("images/"+str(random.randint(1,len(numimages)))+'.png', cv2.IMREAD_UNCHANGED)
+    image = "images/"+str(random.randint(1,len(numimages)))+'.png'
     meme.make_meme(text1, text2,image)
 @client.event
 async def on_ready():
@@ -57,8 +57,10 @@ async def on_message(message):
         return
     if "!shitpost" in message.content:
         text = message.content[10::]
+        msg = await message.channel.send("Beginning Shitpost...")
         shitpost(text)
-        await message.channel.send(file=discord.File('output.png')) 
+        await msg.delete()
+        await message.channel.send(file=discord.File('temp.png')) 
 
     if message.content == "!rr":
         users = message.guild.members
