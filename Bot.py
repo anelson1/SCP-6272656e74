@@ -42,7 +42,9 @@ def shitpost(message):
     meme.make_meme(text1, text2,image)
 @client.event
 async def on_ready():
-    print("Ni-")
+    game = discord.Game("a dangerous game")
+    await client.change_presence(status=discord.Status.online, activity=game)
+    print("Ready for Gaming")
 
 
 @client.event
