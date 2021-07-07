@@ -163,6 +163,9 @@ async def on_message(message):
                 else:
                     await message.channel.send("Sending invites...")
                     param = message.content[6::]
+                    datefile = open("booldate.txt", "w+")
+                    datefile.write(param)
+                    datefile.close()
                     role = message.guild.get_role(855652264663318540)
                     invitenumber = open("invnum.txt", "r").read()
                     newinvitenumber = open("invnum.txt", "w+")
@@ -175,11 +178,12 @@ async def on_message(message):
                 invnum = open("invnum.txt", "r").read()
                 boolers = open(invnum+".json", "r")
                 booldict = json.load(boolers)
+                date = open("booldate.txt").read()
                 string = "So far: "
                 for k,v in booldict.items():
                     if v == "Yes":
                         string+= k + ", "
-                string += "has agreed to bool"
+                string += "has agreed to bool on " + date
                 await message.channel.send(string)
             if message.content == "end" and role.permissions.administrator:
                 print("Bye")
