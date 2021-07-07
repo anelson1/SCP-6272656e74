@@ -163,7 +163,7 @@ async def on_message(message):
                 else:
                     await message.channel.send("Sending invites...")
                     param = message.content[6::]
-                    role = message.guild.get_role(760375992513724426)
+                    role = message.guild.get_role(855652264663318540)
                     invitenumber = open("invnum.txt", "r").read()
                     newinvitenumber = open("invnum.txt", "w+")
                     newinvitenumber.write(str(int(invitenumber) + 1))
