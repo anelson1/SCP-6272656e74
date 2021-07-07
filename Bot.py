@@ -52,7 +52,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    #try:
+    try:
         if(type(message.channel) == discord.channel.DMChannel):
             if message.content == "!Y" or message.content == "!N":
                 if message.content == "!Y":
@@ -184,11 +184,11 @@ async def on_message(message):
                         string+= k + ", "
                 string += "has agreed to bool"
                 await message.channel.send(string)
-
-
             if message.content == "end" and role.permissions.administrator:
                 print("Bye")
                 exit(0)
+    except:
+        await message.channel.send("Something went wrong, go yell at Angelo.")
 
 
 async def colorChange(role, color):
