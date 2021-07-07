@@ -168,11 +168,8 @@ async def on_message(message):
                     newinvitenumber = open("invnum.txt", "w+")
                     newinvitenumber.write(str(int(invitenumber) + 1))
                     newinvitenumber.close()
-                    for member in role.members:
-                        if member.dm_channel == None:
-                            chan = await member.create_dm()
-                        else:
-                            chan = member.dm_channel
+                    for member in role.members:    
+                        chan = await member.create_dm()
                         await chan.send(str(message.author) + " would like to bool on " + str(param) + ". Please respond with !Y for yes or !N for no.")    
             if message.content == "!listbool":
                 invnum = open("invnum.txt", "r").read()
