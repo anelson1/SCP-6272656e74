@@ -17,6 +17,15 @@ A Discord bot based off a friend. Utilizies Discordpy and other useful libraires
 ```
 !Brian - Generate two random words, one starting with M and one ending with R
 ```
+```
+!shitpost <string> - Create a meme based on the inputted string
+```
+```
+!bool <string> - Send a DM to everyone with role name 'boolin', asking if they wish to bool on a given date
+```
+```
+!listbool - lists everyone who agreed to bool
+```
 Also: try saying "based" in a sentance. You will be in for a suprise.
 
 ## Credit
