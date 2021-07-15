@@ -6,16 +6,13 @@ A Discord bot based off a friend. Utilizies Discordpy and other useful libraires
 !rr - Pick a random user and make their username rainbow for 10 seconds
 ```
 ```
-!rainbow - Make your username rainbow for 10 seconds
-```
-```
-!Palu - Generates a funny emoji
+!palu - Generates a funny emoji
 ```
 ```
 !Based - Plays a special song in chat (must be in a voice call for it to funciton)
 ```
 ```
-!Brian - Generate two random words, one starting with M and one ending with R
+!brian - Generate two random words, one starting with M and one ending with R
 ```
 ```
 !shitpost <string> - Create a meme based on the inputted string
@@ -26,7 +23,6 @@ A Discord bot based off a friend. Utilizies Discordpy and other useful libraires
 ```
 !listbool - lists everyone who agreed to bool
 ```
-Also: try saying "based" in a sentance. You will be in for a suprise.
 
 ## Credit
 Bot written by Angelo Nelson
