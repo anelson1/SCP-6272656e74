@@ -33,7 +33,7 @@ async def on_message(message):
 
             # Creates a meme from the given text
             if "!shitpost" in message.content:
-                await meme.shitpost(message)
+                await meme.shitpost(message, was_random=False)
 
             # Randomly give one person in the server a rainbow name (Warning: May get the bot banned for abuse of the API)
             if message.content == "!rr":

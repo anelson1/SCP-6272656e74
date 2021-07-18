@@ -10,7 +10,8 @@ import shutil
 
 #Fetch memes from a cursed image sub-reddit to use with our meme making function
 async def fetch_meme(message):
-    response_API = requests.get('https://www.reddit.com/r/blursedimages.json', headers={'User-agent': 'Based Bot 1.0'})
+    url_list= ['https://www.reddit.com/r/nocontextpics.json','https://www.reddit.com/r/blursedimages.json']
+    response_API = requests.get(random.choice(url_list), headers={'User-agent': 'Based Bot 1.0'})
     if not response_API.ok:
         print("Error", response_API.status_code)
         await message.channel.send("Slow down on the memes buddy")
@@ -29,7 +30,7 @@ async def fetch_meme(message):
 async def roulette(message):
     check = random.randint(1, 100)
     if check == 1:
-        await shitpost(message)
+        await shitpost(message, was_random=True)
 
 # Split parameter into top and bottom text
 
@@ -46,11 +47,14 @@ def find_space(text):
 # Handler to load in text and image to meme maker
 
 
-async def shitpost(message):
+async def shitpost(message, was_random):
     flag = await fetch_meme(message)
     if flag == "error":
         return
-    text = message.content[10::]
+    if not was_random:
+        text = message.content[10::]
+    else:
+        text = message.content
     midpoint = find_space(text)
     text1 = text[0:midpoint]
     text2 = text[midpoint+1::]
