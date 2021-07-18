@@ -35,7 +35,7 @@ async def shitpost(message):
     text1 = text[0:midpoint]
     text2 = text[midpoint+1::]
     numimages = os.listdir("src/meme_functionality/images")
-    image = "src/meme_functionality/images/"+str(random.randint(1, len(numimages)-1))+'.png'
+    image = "src/meme_functionality/images/"+str(random.randint(1, len(numimages)-2))+'.png'
     sent = await message.channel.send("Making meme...")
     make_meme(text1, text2, image)
     await message.channel.send(file=discord.File('src/meme_functionality/images/output/output.png'))
