@@ -8,6 +8,10 @@ import requests
 import json
 import shutil
 
+#resize image
+def resize(image):
+    img = Image.open(image)
+    img.save("src/meme_functionality/images/temp.jpg",optimize = True, quality = 10)
 #Fetch memes from a cursed image sub-reddit to use with our meme making function
 async def fetch_meme(message):
     url_list= ['https://www.reddit.com/r/nocontextpics.json','https://www.reddit.com/r/blursedimages.json']
@@ -20,10 +24,22 @@ async def fetch_meme(message):
     parsed_data= json.loads(data)
     image_url = parsed_data["data"]["children"][random.randint(2,len(parsed_data["data"]["children"])-1)]["data"]["url_overridden_by_dest"]
     resp = requests.get(image_url, stream=True)
-    local_file = open('src/meme_functionality/images/temp.png', 'wb')
+    local_file = open('src/meme_functionality/images/temp.jpg', 'wb')
     resp.raw.decode_content = True
     shutil.copyfileobj(resp.raw, local_file)
-
+    print(is_image_greater_then_8_MB())
+    if is_image_greater_then_8_MB():
+        print("Image too big, getting another")
+        fetch_meme(message)
+        
+#Check and see if gotten image is >8MB
+def is_image_greater_then_8_MB():
+    file_path = 'src/meme_functionality/images/temp.jpg'
+    file_size = os.path.getsize(file_path)
+    print(file_size/1024**2)
+    if file_size/1024**2 > 8:
+        return True
+    return False
 # Random chance that any message sent will turn into a meme
 
 
@@ -48,7 +64,9 @@ def find_space(text):
 
 
 async def shitpost(message, was_random):
+    print("Initaiting Shitposting Sequence")
     flag = await fetch_meme(message)
+    print("Meme has been fetched")
     if flag == "error":
         return
     if not was_random:
@@ -59,16 +77,17 @@ async def shitpost(message, was_random):
     text1 = text[0:midpoint]
     text2 = text[midpoint+1::]
     numimages = os.listdir("src/meme_functionality/images")
-    image = "src/meme_functionality/images/temp.png"
+    image = "src/meme_functionality/images/temp.jpg"
     sent = await message.channel.send("Making meme...")
     make_meme(text1, text2, image)
-    await message.channel.send(file=discord.File('src/meme_functionality/images/output/output.png'))
+    print("Meme has been made")
+    await message.channel.send(file=discord.File('src/meme_functionality/images/output/output.jpg'))
     await sent.delete()
 
 # Logic to generate meme
-
-
 def make_meme(topString, bottomString, filename):
+    resize(filename)
+    print("Meme is being made")
     img = Image.open(filename)
     imageSize = img.size
     # find biggest font size that works
@@ -101,7 +120,7 @@ def make_meme(topString, bottomString, filename):
                 (bottomTextPosition[0]+x, bottomTextPosition[1]+y), bottomString, (0, 0, 0), font=font)
     draw.text(topTextPosition, topString, (255, 255, 255), font=font)
     draw.text(bottomTextPosition, bottomString, (255, 255, 255), font=font)
-    img.save("src/meme_functionality/images/output/output.png")
+    img.save("src/meme_functionality/images/output/output.jpg", optimize = True, quality = 30)
 
 
 def get_upper(somedata):
