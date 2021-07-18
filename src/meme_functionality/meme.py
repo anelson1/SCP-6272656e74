@@ -1,9 +1,27 @@
 from src import discord
-import random
-import os
 from PIL import ImageFont
 from PIL import Image
 from PIL import ImageDraw
+import random
+import os
+import requests
+import json
+import shutil
+
+#Fetch memes from a cursed image sub-reddit to use with our meme making function
+async def fetch_meme(message):
+    response_API = requests.get('https://www.reddit.com/r/blursedimages.json', headers={'User-agent': 'Based Bot 1.0'})
+    if not response_API.ok:
+        print("Error", response_API.status_code)
+        await message.channel.send("Slow down on the memes buddy")
+        return "error"
+    data = response_API.text
+    parsed_data= json.loads(data)
+    image_url = parsed_data["data"]["children"][random.randint(2,len(parsed_data["data"]["children"])-1)]["data"]["url_overridden_by_dest"]
+    resp = requests.get(image_url, stream=True)
+    local_file = open('src/meme_functionality/images/temp.png', 'wb')
+    resp.raw.decode_content = True
+    shutil.copyfileobj(resp.raw, local_file)
 
 # Random chance that any message sent will turn into a meme
 
@@ -18,7 +36,6 @@ async def roulette(message):
 
 def find_space(text):
     midpoint = int(len(text)/2)
-    print(midpoint, text[midpoint])
     if text[midpoint] != ' ':
         for i in text[int(len(text)/2)::]:
             if i == ' ':
@@ -30,12 +47,15 @@ def find_space(text):
 
 
 async def shitpost(message):
+    flag = await fetch_meme(message)
+    if flag == "error":
+        return
     text = message.content[10::]
     midpoint = find_space(text)
     text1 = text[0:midpoint]
     text2 = text[midpoint+1::]
     numimages = os.listdir("src/meme_functionality/images")
-    image = "src/meme_functionality/images/"+str(random.randint(1, len(numimages)-2))+'.png'
+    image = "src/meme_functionality/images/temp.png"
     sent = await message.channel.send("Making meme...")
     make_meme(text1, text2, image)
     await message.channel.send(file=discord.File('src/meme_functionality/images/output/output.png'))
