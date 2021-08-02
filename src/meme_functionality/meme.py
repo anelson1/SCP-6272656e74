@@ -14,7 +14,7 @@ def resize(image):
     img.save("src/meme_functionality/images/temp.jpg",optimize = True, quality = 10)
 #Fetch memes from a cursed image sub-reddit to use with our meme making function
 async def fetch_meme(message):
-    url_list= ['https://www.reddit.com/r/FunnyCursedImages.json','https://www.reddit.com/r/blursedimages.json','https://www.reddit.com/r/MemeTemplatesOfficial/','https://www.reddit.com/r/MemeTemplatesOfficial/']
+    url_list= ['https://www.reddit.com/r/FunnyCursedImages.json','https://www.reddit.com/r/blursedimages.json','https://www.reddit.com/r/MemeTemplatesOfficial.json','https://www.reddit.com/r/MemeTemplatesIta.json']
     response_API = requests.get(random.choice(url_list), headers={'User-agent': 'Based Bot 1.0'})
     if not response_API.ok:
         print("Error", response_API.status_code)
@@ -92,12 +92,12 @@ def make_meme(topString, bottomString, filename):
     imageSize = img.size
     # find biggest font size that works
     fontSize = int(imageSize[1]/5)
-    font = ImageFont.truetype("C:/Windows/Fonts/Impact.ttf", fontSize)
+    font = ImageFont.truetype("src/meme_functionality/impact.ttf", fontSize)
     topTextSize = font.getsize(topString)
     bottomTextSize = font.getsize(bottomString)
     while topTextSize[0] > imageSize[0]-20 or bottomTextSize[0] > imageSize[0]-20:
         fontSize = fontSize - 1
-        font = ImageFont.truetype("C:/Windows/Fonts/Impact.ttf", fontSize)
+        font = ImageFont.truetype("src/meme_functionality/impact.ttf", fontSize)
         topTextSize = font.getsize(topString)
         bottomTextSize = font.getsize(bottomString)
     # find top centered position for top text

@@ -69,5 +69,5 @@ async def bool_list(message):
     for k, v in booldict.items():
         if v == "Yes":
             string += k + ", "
-    string += "has agreed to bool on " + date
+    string += "have agreed to bool on " + date
     await message.channel.send(string)
