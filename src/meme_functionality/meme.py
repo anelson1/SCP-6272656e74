@@ -14,7 +14,7 @@ def resize(image):
     img.save("src/meme_functionality/images/temp.jpg",optimize = True, quality = 10)
 #Fetch memes from a cursed image sub-reddit to use with our meme making function
 async def fetch_meme(message):
-    url_list= ['https://www.reddit.com/r/nocontextpics.json','https://www.reddit.com/r/blursedimages.json']
+    url_list= ['https://www.reddit.com/r/FunnyCursedImages.json','https://www.reddit.com/r/blursedimages.json','https://www.reddit.com/r/MemeTemplatesOfficial/','https://www.reddit.com/r/MemeTemplatesOfficial/']
     response_API = requests.get(random.choice(url_list), headers={'User-agent': 'Based Bot 1.0'})
     if not response_API.ok:
         print("Error", response_API.status_code)
