@@ -8,9 +8,9 @@ async def send(long, message):
         VC = message.author.voice.channel
         connection = await VC.connect(timeout=10)
         if not long:
-            connection.play(discord.FFmpegPCMAudio(executable="C:/ffmpeg/bin/ffmpeg.exe", source="src/misc_functionalities/based/shortbased.mp3"))
+            connection.play(discord.FFmpegPCMAudio(executable="/usr/bin/ffmpeg", source="src/misc_functionalities/based/shortbased.mp3"))
         else:
-            connection.play(discord.FFmpegPCMAudio(executable="C:/ffmpeg/bin/ffmpeg.exe", source="src/misc_functionalities/based/based.mp3"))
+            connection.play(discord.FFmpegPCMAudio(executable="/usr/bin/ffmpeg", source="src/misc_functionalities/based/based.mp3"))
         while connection.is_playing():
             await asyncio.sleep(.1)
         await connection.disconnect()
