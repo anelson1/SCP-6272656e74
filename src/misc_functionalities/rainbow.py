@@ -1,4 +1,4 @@
-from src import discord
+import discord
 import random
 #pick a random user, ensure they arent an admin, make them rainbow
 async def rainbow(message):

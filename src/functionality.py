@@ -1,7 +1,7 @@
 from src import discord, client
 from src.bool_functionality import bool
 from src.meme_functionality import meme
-from src.misc_functionalities import rainbow, brian, based, palu
+from src.misc_functionalities import rainbow, brian, based, palu, angelo
 import random
 import os
 import nacl
@@ -62,6 +62,10 @@ async def on_message(message):
             # List everyone who agreed to bool
             if message.content == "!listbool":
                 await bool.bool_list(message)
+                
+            if message.content == "!angelo":
+                await angelo.angelo(message)
+
 
     except Exception as e:
         print(e)
