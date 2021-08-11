@@ -13,7 +13,7 @@ async def angelo(message):
             if msg.author == message.author:
                 count+=1
         await newmsg.delete()
-        await message.channel.send(message.author.nick + " has accounted for " + str((count/totalmsg)*100) + "% of all messages in " + str(message.channel))
+        await message.channel.send(message.author.nick + " has accounted for " + str((count/totalmsg)*100) + "% of all messages in " + str(message.channel) +"\n Based on " + str(totalmsg) + " messages")
     if message.author.nick == "Angelo Nelson":
         await message.channel.edit(topic = "Pretty much just Angelo saying dumb shit " + str((count/totalmsg)*100) + "% of the time")
 
@@ -41,5 +41,6 @@ async def bigangelo(message):
         for k, v in sortedusers.items():
             result += "***"+str(k)+"***" + " has accounted for " + "***"+str((v/totalmsg)*100) + "%*** of all messages in " + str(message.channel) + "\n"
         await newmsg.delete()
+    result += "\nBased on " + str(totalmsg) + " messages"
     await message.channel.send(result)
     
