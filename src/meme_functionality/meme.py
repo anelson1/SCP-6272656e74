@@ -65,24 +65,25 @@ def find_space(text):
 
 async def shitpost(message, was_random):
     print("Initaiting Shitposting Sequence")
-    flag = await fetch_meme(message)
-    print("Meme has been fetched")
-    if flag == "error":
-        return
-    if not was_random:
-        text = message.content[10::]
-    else:
-        text = message.content
-    midpoint = find_space(text)
-    text1 = text[0:midpoint]
-    text2 = text[midpoint+1::]
-    numimages = os.listdir("src/meme_functionality/images")
-    image = "src/meme_functionality/images/temp.jpg"
-    sent = await message.channel.send("Making meme...")
-    make_meme(text1, text2, image)
-    print("Meme has been made")
-    await message.channel.send(file=discord.File('src/meme_functionality/images/output/output.jpg'))
-    await sent.delete()
+    async with message.channel.typing():
+        flag = await fetch_meme(message)
+        print("Meme has been fetched")
+        if flag == "error":
+            return
+        if not was_random:
+            text = message.content[10::]
+        else:
+            text = message.content
+        midpoint = find_space(text)
+        text1 = text[0:midpoint]
+        text2 = text[midpoint+1::]
+        numimages = os.listdir("src/meme_functionality/images")
+        image = "src/meme_functionality/images/temp.jpg"
+        sent = await message.channel.send("Making meme...")
+        make_meme(text1, text2, image)
+        print("Meme has been made")
+        await message.channel.send(file=discord.File('src/meme_functionality/images/output/output.jpg'))
+        await sent.delete()
 
 # Logic to generate meme
 def make_meme(topString, bottomString, filename):
