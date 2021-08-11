@@ -65,6 +65,9 @@ async def on_message(message):
                 
             if message.content == "!angelo":
                 await angelo.angelo(message)
+            
+            if message.content == "!bigangelo":
+                await angelo.bigangelo(message)
 
 
     except Exception as e:
