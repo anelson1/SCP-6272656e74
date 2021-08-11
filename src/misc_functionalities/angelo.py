@@ -10,4 +10,4 @@ async def angelo(message):
     await newmsg.delete()
     await message.channel.send(message.author.nick + " has accounted for " + str((count/1000)*100) + "% of all messages in " + str(message.channel))
     if message.author.nick == "Angelo Nelson":
-        await message.channel.edit(topic = "Pretty much just Angelo saying stupid shit " + str((count/1000)*100) + "% of the time")
+        await message.channel.edit(topic = "Pretty much just Angelo saying dumb shit " + str((count/1000)*100) + "% of the time")
