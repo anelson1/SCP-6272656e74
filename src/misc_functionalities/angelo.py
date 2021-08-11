@@ -1,6 +1,6 @@
 import discord
 
-LIMIT = 10000
+LIMIT = 1000000
 
 async def angelo(message):
     chan = message.channel
@@ -13,9 +13,10 @@ async def angelo(message):
             if msg.author == message.author:
                 count+=1
         await newmsg.delete()
-        await message.channel.send(message.author.nick + " has accounted for " + str((count/totalmsg)*100) + "% of all messages in " + str(message.channel) +"\n Based on " + str(totalmsg) + " messages")
+        await message.channel.send(message.author.nick + " has accounted for " + str((count/totalmsg)*100) + "% of all messages in " + str(message.channel))
     if message.author.nick == "Angelo Nelson":
         await message.channel.edit(topic = "Pretty much just Angelo saying dumb shit " + str((count/totalmsg)*100) + "% of the time")
+        await message.channel.send("Based on " + str(totalmsg) + " messages")
 
 async def bigangelo(message):
     chan = message.channel
@@ -41,6 +42,6 @@ async def bigangelo(message):
         for k, v in sortedusers.items():
             result += "***"+str(k)+"***" + " has accounted for " + "***"+str((v/totalmsg)*100) + "%*** of all messages in " + str(message.channel) + "\n"
         await newmsg.delete()
-    result += "\nBased on " + str(totalmsg) + " messages"
     await message.channel.send(result)
+    await message.channel.send("Based on " + str(totalmsg) + " messages")
     
