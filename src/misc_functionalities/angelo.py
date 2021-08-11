@@ -1,6 +1,6 @@
 import discord
 
-LIMIT = 1000000
+LIMIT = 20000
 
 async def angelo(message):
     chan = message.channel
