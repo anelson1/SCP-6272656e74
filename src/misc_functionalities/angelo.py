@@ -1,6 +1,6 @@
 import discord
 
-LIMIT = 20000
+LIMIT = 1000000
 
 async def angelo(message):
     chan = message.channel
@@ -39,9 +39,8 @@ async def bigangelo(message):
             else:
                 users[name] = users[name] + 1
         sortedusers = dict(sorted(users.items(),key= lambda x:x[1], reverse=True))
-        for k, v in sortedusers.items():
-            result += "***"+str(k)+"***" + " has accounted for " + "***"+str((v/totalmsg)*100) + "%*** of all messages in " + str(message.channel) + "\n"
         await newmsg.delete()
-    await message.channel.send(result)
+        for k, v in sortedusers.items():
+            await message.channel.send("***"+str(k)+"***" + " has accounted for " + "***"+str((v/totalmsg)*100) + "%*** of all messages in " + str(message.channel))
     await message.channel.send("Based on " + str(totalmsg) + " messages")
     
