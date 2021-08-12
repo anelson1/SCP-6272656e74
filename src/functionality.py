@@ -72,4 +72,4 @@ async def on_message(message):
 
     except Exception as e:
         print(e)
-        await message.channel.send("Something went wrong, go yell at Angelo.")
+        await client.get_channel(875459781958197318).send(e)
