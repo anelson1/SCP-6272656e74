@@ -27,16 +27,14 @@ async def fetch_meme(message):
     local_file = open('src/meme_functionality/images/temp.jpg', 'wb')
     resp.raw.decode_content = True
     shutil.copyfileobj(resp.raw, local_file)
-    print(is_image_greater_then_8_MB())
     if is_image_greater_then_8_MB():
         print("Image too big, getting another")
-        fetch_meme(message)
+        await fetch_meme(message)
         
 #Check and see if gotten image is >8MB
 def is_image_greater_then_8_MB():
     file_path = 'src/meme_functionality/images/temp.jpg'
     file_size = os.path.getsize(file_path)
-    print(file_size/1024**2)
     if file_size/1024**2 > 8:
         return True
     return False
@@ -80,7 +78,13 @@ async def shitpost(message, was_random):
         numimages = os.listdir("src/meme_functionality/images")
         image = "src/meme_functionality/images/temp.jpg"
         sent = await message.channel.send("Making meme...")
-        make_meme(text1, text2, image)
+        try:
+            make_meme(text1, text2, image)
+        except:
+            print("Error making meme, trying again")
+            await sent.delete()
+            await shitpost(message, was_random)
+            return
         print("Meme has been made")
         await message.channel.send(file=discord.File('src/meme_functionality/images/output/output.jpg'))
         await sent.delete()
