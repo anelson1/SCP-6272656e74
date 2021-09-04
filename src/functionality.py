@@ -1,7 +1,8 @@
 from src import discord, client
 from src.bool_functionality import bool
 from src.meme_functionality import meme
-from src.misc_functionalities import rainbow, brian, based, palu, angelo
+from src.misc_functionalities import rainbow, brian, based, palu, angelo, boowomp
+from datetime import datetime
 import random
 import os
 import nacl
@@ -17,7 +18,7 @@ async def on_ready():
     print("Booting up...")
     print("Booted! Welcome to Based Bot")
 
-#What happens upon receiving a message 
+#What happens upon receiving a message
 @client.event
 async def on_message(message):
     if message.author == client.user:
@@ -62,14 +63,20 @@ async def on_message(message):
             # List everyone who agreed to bool
             if message.content == "!listbool":
                 await bool.bool_list(message)
-                
+
             if message.content == "!angelo":
                 await angelo.angelo(message)
-            
+
             if message.content == "!bigangelo":
                 await angelo.bigangelo(message)
 
+            if message.content == "boowomp":
+                await boowomp.send(False, message)
+
+            if message.content == "!boowomp":
+                await boowomp.send(True, message)
+            
 
     except Exception as e:
         print(e)
-        await client.get_channel(875459781958197318).send(e)
+        await client.get_channel(875459781958197318).send(str(e) + " has occured at " + str(datetime.now()))
