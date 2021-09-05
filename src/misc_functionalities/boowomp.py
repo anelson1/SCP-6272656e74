@@ -10,7 +10,7 @@ async def send(long, message, random):
         elif random:
             connection.play(discord.FFmpegPCMAudio(executable="/usr/bin/ffmpeg", source="src/misc_functionalities/boowomp/random.mp3"))
         else:
-            connection.play(discord.FFmpegPCMAudio(executable="/usr/bin/ffmpeg", source="src/misc_functionalities/based/boowomp1hr.mp3"))
+            connection.play(discord.FFmpegPCMAudio(executable="/usr/bin/ffmpeg", source="src/misc_functionalities/boowomp/boowomp1hr.mp3"))
         while connection.is_playing():
             await asyncio.sleep(.1)
         await connection.disconnect()
