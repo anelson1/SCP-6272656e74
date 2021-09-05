@@ -1,12 +1,14 @@
 from src import discord
 import asyncio
 
-async def send(long, message):
+async def send(long, message, random):
     try:
         VC = message.author.voice.channel
         connection = await VC.connect(timeout=10)
         if not long:
             connection.play(discord.FFmpegPCMAudio(executable="/usr/bin/ffmpeg", source="src/misc_functionalities/boowomp/boowomp.mp3"))
+        elif random:
+            connection.play(discord.FFmpegPCMAudio(executable="/usr/bin/ffmpeg", source="src/misc_functionalities/boowomp/random.mp3"))
         else:
             connection.play(discord.FFmpegPCMAudio(executable="/usr/bin/ffmpeg", source="src/misc_functionalities/based/boowomp1hr.mp3"))
         while connection.is_playing():

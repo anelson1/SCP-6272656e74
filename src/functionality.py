@@ -75,7 +75,9 @@ async def on_message(message):
 
             if message.content == "!boowomp":
                 await boowomp.send(True, message)
-            
+
+            if message.content == "!random":
+                await boowomp.send(False,message,True)
 
     except Exception as e:
         print(e)
