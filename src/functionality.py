@@ -71,10 +71,10 @@ async def on_message(message):
                 await angelo.bigangelo(message)
 
             if message.content == "boowomp":
-                await boowomp.send(False, message)
+                await boowomp.send(False, message, False)
 
             if message.content == "!boowomp":
-                await boowomp.send(True, message)
+                await boowomp.send(True, message, False)
 
             if message.content == "!random":
                 await boowomp.send(False,message,True)
