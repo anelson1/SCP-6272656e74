@@ -13,7 +13,7 @@ async def specificangelo(message, word):
             if msg.author == message.author and word.lower() in message.content.lower():
                 count+=1
         await newmsg.delete()
-    await message.channel.send(message.author.nick + " has said " + word + " " + str(count) + "many times in " + str(message.channel))
+    await message.channel.send(message.author.nick + " has said " + word + " " + str(count) + " many times in " + str(message.channel))
 
 async def angelo(message):
     chan = message.channel
