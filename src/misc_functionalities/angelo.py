@@ -10,7 +10,7 @@ async def specificangelo(message, word):
     async with message.channel.typing():
         async for msg in chan.history(limit=LIMIT):
             totalmsg += 1
-            if msg.author == message.author and word in message.content:
+            if msg.author == message.author and word.lower() in message.content.lower():
                 count+=1
         await newmsg.delete()
     await message.channel.send(message.author.nick + " has said " + word + " " + count + "many times in " + str(message.channel))
