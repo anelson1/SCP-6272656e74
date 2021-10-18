@@ -3,6 +3,9 @@ import discord
 LIMIT = 1000000
 
 async def specificangelo(message, word):
+    if word == "":
+        await message.channel.send("Please provide a string")
+        return
     chan = message.channel
     count = 0
     totalmsg = 0
