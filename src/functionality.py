@@ -49,7 +49,7 @@ async def on_message(message):
                 await brian.generate_words(message)
 
             # Sends the song 'based' in chat any time the word based is said then tries to join a voice call and plays the song
-            if "based" in message.content:
+            if "Based" in message.content:
                 await based.send(False, message)
 
             # Joins voice call of message author and plays the whole song 'based'
@@ -78,6 +78,9 @@ async def on_message(message):
 
             if message.content == "!random":
                 await boowomp.send(False,message,True)
+
+            if "!angelospecific" in message.content:
+                await angelo.specificangelo(message, message.content[16::])
 
     except Exception as e:
         print(e)

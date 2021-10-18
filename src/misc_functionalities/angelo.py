@@ -2,6 +2,19 @@ import discord
 
 LIMIT = 1000000
 
+async def specificangelo(message, word):
+    chan = message.channel
+    count = 0
+    totalmsg = 0
+    newmsg = await message.channel.send("Counting...")
+    async with message.channel.typing():
+        async for msg in chan.history(limit=LIMIT):
+            totalmsg += 1
+            if msg.author == message.author and word in message.content:
+                count+=1
+        await newmsg.delete()
+    await message.channel.send(message.author.nick + " has said " + word + " " + count + "many times in " + str(message.channel))
+
 async def angelo(message):
     chan = message.channel
     count = 0
