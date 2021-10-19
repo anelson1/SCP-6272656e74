@@ -3,7 +3,7 @@ import discord
 LIMIT = 1000000
 
 async def specificangelo(message, word):
-    if word == "":
+    if not word:
         await message.channel.send("Please provide a string")
         return
     chan = message.channel
@@ -16,7 +16,11 @@ async def specificangelo(message, word):
             if msg.author == message.author and word.lower() in message.content.lower():
                 count+=1
         await newmsg.delete()
-    await message.channel.send(message.author.nick + " has said " + word + " " + str(count) + " many times in " + str(message.channel))
+    embed = discord.Embed(title="Specific Word Count", description="Counts the number of times a user has said a specific word", color=message.author.color)
+    embed.add_field(name=message.author, value="Has said " + word + " "+  str(count) + " many times in " + str(message.channel))
+    embed.set_thumbnail(url=message.author.avatar_url)
+    embed.set_footer(text="Based on " + str(totalmsg) + " messages")
+    await message.channel.send(embed=embed)
 
 async def angelo(message):
     chan = message.channel
@@ -29,10 +33,13 @@ async def angelo(message):
             if msg.author == message.author:
                 count+=1
         await newmsg.delete()
-        await message.channel.send(message.author.nick + " has accounted for " + str((count/totalmsg)*100) + "% of all messages in " + str(message.channel))
+    embed = discord.Embed(title="Word Count", description="Counts the number of times a user has sent messages", color=message.author.color)
+    embed.add_field(name=message.author, value=message.author.nick + " has accounted for " + str((count/totalmsg)*100) + "% of all messages in " + str(message.channel))
+    embed.set_thumbnail(url=message.author.avatar_url)
+    embed.set_footer(text="Based on " + str(totalmsg) + " messages")
+    await message.channel.send(embed=embed)
     if message.author.nick == "Angelo Nelson":
         await message.channel.edit(topic = "Pretty much just Angelo saying dumb shit " + str((count/totalmsg)*100) + "% of the time")
-        await message.channel.send("Based on " + str(totalmsg) + " messages")
 
 async def bigangelo(message):
     chan = message.channel

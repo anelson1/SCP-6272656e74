@@ -81,6 +81,14 @@ async def on_message(message):
 
             if "!angelospecific" in message.content:
                 await angelo.specificangelo(message, message.content[16::])
+            
+            if "!testembed" in message.content:
+                embed = discord.Embed(title="Test", description = "Bruh we be testin", color = discord.Color.gold())
+                print(message.author.avatar_url)
+                embed.set_thumbnail(url=message.author.avatar_url)
+                embed.add_field(name="this is a field", value="fuck you")
+                embed.set_footer(text="Copyright Nelson Net 2021")
+                await message.channel.send(embed=embed)
 
     except Exception as e:
         print(e)
