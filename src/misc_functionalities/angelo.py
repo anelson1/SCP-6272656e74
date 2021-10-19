@@ -13,7 +13,7 @@ async def specificangelo(message, word):
     async with message.channel.typing():
         async for msg in chan.history(limit=LIMIT):
             totalmsg += 1
-            if msg.author == message.author and word.lower() in message.content.lower():
+            if msg.author == message.author and word.lower() in msg.content.lower():
                 count+=1
         await newmsg.delete()
     embed = discord.Embed(title="Specific Word Count", description="Counts the number of times a user has said a specific word", color=message.author.color)
