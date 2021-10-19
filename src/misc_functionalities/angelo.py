@@ -1,4 +1,4 @@
-import discord
+from src import discord, client
 
 async def specificangelo(message, word):
     if not word:
@@ -23,7 +23,15 @@ async def specificangelo(message, word):
     embed.set_footer(text="Based on " + str(totalmsg) + " messages")
     await message.channel.send(embed=embed)
 
-async def angelo(message):
+async def angelo(message, params):
+    if params:
+        try:
+            user = await client.fetch_user(params[0])
+        except:
+            await message.channel.send("No user with given ID found")
+            return
+    else:
+        user = message.author
     chan = message.channel
     count = 0
     totalmsg = 0
@@ -31,12 +39,12 @@ async def angelo(message):
     async with message.channel.typing():
         async for msg in chan.history(limit=None):
             totalmsg += 1
-            if msg.author == message.author:
+            if msg.author == user:
                 count+=1
         await newmsg.delete()
-    embed = discord.Embed(title="Word Count", description="Counts the number of times a user has sent messages", color=message.author.color)
-    embed.add_field(name=message.author, value=message.author.nick + " has accounted for " + str((count/totalmsg)*100) + "% of all messages in " + str(message.channel))
-    embed.set_thumbnail(url=message.author.avatar_url)
+    embed = discord.Embed(title="Chat Equity", description="Gives the percentage of messages that belong to the user", color=user.color)
+    embed.add_field(name=user, value=user.display_name + " has accounted for " + str((count/totalmsg)*100) + "% of all messages in " + str(message.channel))
+    embed.set_thumbnail(url=user.avatar_url)
     embed.set_footer(text="Based on " + str(totalmsg) + " messages")
     await message.channel.send(embed=embed)
     if message.author.nick == "Angelo Nelson":
@@ -64,7 +72,9 @@ async def bigangelo(message):
                 users[name] = users[name] + 1
         sortedusers = dict(sorted(users.items(),key= lambda x:x[1], reverse=True))
         await newmsg.delete()
+        embed = discord.Embed(title="Total Chat Equity for " + str(message.channel), description="Gives the percentage of messages that belong to all users", color=discord.Color.random())
         for k, v in sortedusers.items():
-            await message.channel.send("***"+str(k)+"***" + " has accounted for " + "***"+str((v/totalmsg)*100) + "%*** of all messages in " + str(message.channel))
-    await message.channel.send("Based on " + str(totalmsg) + " messages")
+            embed.add_field(name=str(k), value="Has accounted for " +str((v/totalmsg)*100) + "% of all messages", inline=False)
+        embed.set_footer(text="Based on " + str(totalmsg) + " messages")
+    await message.channel.send(embed=embed)
     
