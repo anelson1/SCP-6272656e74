@@ -1,7 +1,5 @@
 import discord
 
-LIMIT = 1000000
-
 async def specificangelo(message, word):
     if not word:
         await message.channel.send("Please provide a string")
@@ -11,13 +9,16 @@ async def specificangelo(message, word):
     totalmsg = 0
     newmsg = await message.channel.send("Counting...")
     async with message.channel.typing():
-        async for msg in chan.history(limit=LIMIT):
+        async for msg in chan.history(limit=None):
             totalmsg += 1
-            if msg.author == message.author and word.lower() in msg.content.lower():
-                count+=1
+            if msg.author == message.author:
+                words = msg.content.split()
+                for i in words:
+                    if i.lower() == word.lower():
+                        count+=1
         await newmsg.delete()
     embed = discord.Embed(title="Specific Word Count", description="Counts the number of times a user has said a specific word", color=message.author.color)
-    embed.add_field(name=message.author, value="Has said " + word + " "+  str(count) + " many times in " + str(message.channel))
+    embed.add_field(name=message.author, value="Has said " + word + " "+  str(count-1) + " many times in " + str(message.channel))
     embed.set_thumbnail(url=message.author.avatar_url)
     embed.set_footer(text="Based on " + str(totalmsg) + " messages")
     await message.channel.send(embed=embed)
@@ -28,7 +29,7 @@ async def angelo(message):
     totalmsg = 0
     newmsg = await message.channel.send("Counting...")
     async with message.channel.typing():
-        async for msg in chan.history(limit=LIMIT):
+        async for msg in chan.history(limit=None):
             totalmsg += 1
             if msg.author == message.author:
                 count+=1
@@ -48,7 +49,7 @@ async def bigangelo(message):
     totalmsg = 0
     newmsg = await message.channel.send("Counting...")
     async with message.channel.typing():
-        async for msg in chan.history(limit=LIMIT):
+        async for msg in chan.history(limit=None):
             try:
                 if msg.author.nick == None:
                     name = msg.author
