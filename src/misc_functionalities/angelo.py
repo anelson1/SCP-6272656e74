@@ -26,9 +26,9 @@ async def specificangelo(message, word):
 async def angelo(message, id):
     if id:
         try:
-            user = await client.fetch_user(id)
+            user = await message.guild.fetch_member(id)
         except:
-            await message.channel.send("No user with given ID found")
+            await message.channel.send("No user with given ID in this server")
             return
     else:
         user = message.author
