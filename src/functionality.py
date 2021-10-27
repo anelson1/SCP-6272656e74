@@ -1,14 +1,18 @@
 from src import discord, client
 from src.bool_functionality import bool
 from src.meme_functionality import meme
-from src.misc_functionalities import rainbow, brian, based, palu, angelo, boowomp
+from src.misc_functionalities import rainbow, brian, based, palu, angelo, boowomp, whois
 from datetime import datetime
+from src.misc_functionalities.helper import ping_to_id
+
 import random
 import os
 import nacl
 import ffmpeg
 import asyncio
 import json
+import re
+
 
 # What happens upon start up
 @client.event
@@ -18,7 +22,9 @@ async def on_ready():
     print("Booting up...")
     print("Booted! Welcome to Based Bot")
 
-#What happens upon receiving a message
+# What happens upon receiving a message
+
+
 @client.event
 async def on_message(message):
     if message.author == client.user:
@@ -64,25 +70,34 @@ async def on_message(message):
             if message.content == "!listbool":
                 await bool.bool_list(message)
 
-            if message.content[0:7] == "!angelo":
-                params = message.content[8::].split()
-                await angelo.angelo(message,params)
+            # Returns the "chat equity" of a given user
+            if message.content[0:7] == "!equity":
+                id = ping_to_id(message.content)
+                await angelo.angelo(message, id)
 
-            if message.content == "!bigangelo":
+            # Returns the chat equity of every user for a channel
+            if message.content == "!bigequity":
                 await angelo.bigangelo(message)
 
+            # Plays boowomp
             if message.content == "boowomp":
                 await boowomp.send(False, message, False)
 
+            # Plays 1 hour of silence broken up by boowomp
             if message.content == "!boowomp":
                 await boowomp.send(True, message, False)
 
+            # Plays 1 hour of silence broken up by random sounds
             if message.content == "!random":
-                await boowomp.send(False,message,True)
+                await boowomp.send(False, message, True)
 
-            if "!angelospecific" in message.content:
+            # Checks for a specific word
+            if "!specificword" in message.content:
                 await angelo.specificangelo(message, message.content[16::])
-            
+                
+            # Displays whois info about the user
+            if "!whois" in message.content:
+                await whois.whois(message, ping_to_id(message.content))
 
     except Exception as e:
         print(e)

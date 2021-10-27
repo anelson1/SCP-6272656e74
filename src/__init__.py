@@ -2,6 +2,7 @@ import discord
 import os
 intents = discord.Intents.default()
 intents.members = True
+intents.presences = True
 client = discord.Client(intents = intents)
 authkey=os.getenv("botkey")
 dir = ("src/meme_functionality/images")

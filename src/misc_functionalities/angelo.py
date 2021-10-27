@@ -23,10 +23,10 @@ async def specificangelo(message, word):
     embed.set_footer(text="Based on " + str(totalmsg) + " messages")
     await message.channel.send(embed=embed)
 
-async def angelo(message, params):
-    if params:
+async def angelo(message, id):
+    if id:
         try:
-            user = await client.fetch_user(params[0])
+            user = await client.fetch_user(id)
         except:
             await message.channel.send("No user with given ID found")
             return
@@ -47,7 +47,7 @@ async def angelo(message, params):
     embed.set_thumbnail(url=user.avatar_url)
     embed.set_footer(text="Based on " + str(totalmsg) + " messages")
     await message.channel.send(embed=embed)
-    if message.author.nick == "Angelo Nelson":
+    if user.nick == "Angelo Nelson":
         await message.channel.edit(topic = "Pretty much just Angelo saying dumb shit " + str((count/totalmsg)*100) + "% of the time")
 
 async def bigangelo(message):
