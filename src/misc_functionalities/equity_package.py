@@ -1,5 +1,4 @@
-from src import discord, client
-
+import discord
 async def specificangelo(message, word):
     if not word:
         await message.channel.send("Please provide a string")

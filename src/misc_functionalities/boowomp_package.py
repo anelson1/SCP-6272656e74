@@ -1,4 +1,4 @@
-from src import discord
+import discord
 import asyncio
 
 async def send(long, message, random):

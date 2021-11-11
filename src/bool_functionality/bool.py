@@ -1,12 +1,10 @@
 from src.constants import MAIN_SERVER_ID, GENERAL_ID, DEV_CHAN_ID, BOOL_ROLE_ID, DEV_ROLE_ID
-from src import client, discord
+import discord
 import json
 from datetime import datetime, time
 
 # Parse message and update JSON file with name and RSVP Status
-
-
-async def bool_RSVP(message):
+async def bool_RSVP(message, client):
     if message.content == "!Y" or message.content == "!N":
         if message.content == "!Y":
             dict = {str(message.author): "Yes"}
