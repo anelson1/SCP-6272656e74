@@ -42,6 +42,7 @@ async def on_ready():
     print(bot.user.name)
     print(bot.user.id)
     print("Booted! Welcome to Based Bot")
+    await bot.change_presence(activity=discord.Game(name="with fate"))
 
 @bot.command()
 async def shitpost(ctx, *, caption: str):
