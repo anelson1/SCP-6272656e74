@@ -1,55 +1,62 @@
-import discord
+"""Helper class for all meme generation functions"""
+import random
+import os
+import json
+import shutil
 from PIL import ImageFont
 from PIL import Image
 from PIL import ImageDraw
-import random
-import os
 import requests
-import json
-import shutil
+import discord
 
-#resize image
 def resize(image):
+    """resize image"""
     img = Image.open(image)
     img.save("src/meme_functionality/images/temp.jpg",optimize = True, quality = 10)
-#Fetch memes from a cursed image sub-reddit to use with our meme making function
+
 async def fetch_meme(message):
-    url_list= ['https://www.reddit.com/r/FunnyCursedImages.json','https://www.reddit.com/r/blursedimages.json','https://www.reddit.com/r/MemeTemplatesOfficial.json','https://www.reddit.com/r/MemeTemplatesIta.json']
-    response_API = requests.get(random.choice(url_list), headers={'User-agent': 'Based Bot 1.0'})
-    if not response_API.ok:
-        print("Error", response_API.status_code)
+    """Fetch memes from a cursed image sub-reddit to use with our meme making function"""
+    url_list= ['https://www.reddit.com/r/FunnyCursedImages.json',
+               'https://www.reddit.com/r/blursedimages.json',
+               'https://www.reddit.com/r/MemeTemplatesOfficial.json',
+               'https://www.reddit.com/r/MemeTemplatesIta.json']
+    response_api = requests.get(random.choice(url_list), headers={'User-agent': 'Based Bot 1.0'})
+    if not response_api.ok:
+        print("Error", response_api.status_code)
         await message.channel.send("Slow down on the memes buddy")
         return "error"
-    data = response_API.text
+    data = response_api.text
     parsed_data= json.loads(data)
-    image_url = parsed_data["data"]["children"][random.randint(2,len(parsed_data["data"]["children"])-1)]["data"]["url_overridden_by_dest"]
+    image_url = parsed_data["data"]["children"][
+        random.randint(2,len(parsed_data["data"]["children"])-1)
+        ]["data"]["url_overridden_by_dest"]
     resp = requests.get(image_url, stream=True)
     local_file = open('src/meme_functionality/images/temp.jpg', 'wb')
     resp.raw.decode_content = True
     shutil.copyfileobj(resp.raw, local_file)
-    if is_image_greater_then_8_MB():
+    if is_image_greater_then_8_mb():
         print("Image too big, getting another")
         await fetch_meme(message)
-        
-#Check and see if gotten image is >8MB
-def is_image_greater_then_8_MB():
+
+
+def is_image_greater_then_8_mb():
+    """Check and see if gotten image is >8MB"""
     file_path = 'src/meme_functionality/images/temp.jpg'
     file_size = os.path.getsize(file_path)
     if file_size/1024**2 > 8:
         return True
     return False
-# Random chance that any message sent will turn into a meme
 
 
-async def roulette(message):
+async def roulette(ctx, caption):
+    """Random chance that any message sent will turn into a meme"""
     check = random.randint(1, 100)
     if check == 1:
-        await shitpost(message, was_random=True)
-
-# Split parameter into top and bottom text
+        await shitpost(ctx, caption)
 
 
 def find_space(text):
+    """Split parameter into top and bottom text"""
     midpoint = int(len(text)/2)
     if text[midpoint] != ' ':
         for i in text[int(len(text)/2)::]:
@@ -58,89 +65,73 @@ def find_space(text):
             midpoint += 1
     return midpoint
 
-# Handler to load in text and image to meme maker
-
-
-async def shitpost(message, was_random):
+async def shitpost(ctx, caption):
+    """Handler to load in text and image to meme maker"""
     print("Initaiting Shitposting Sequence")
-    async with message.channel.typing():
-        flag = await fetch_meme(message)
+    async with ctx.message.channel.typing():
+        flag = await fetch_meme(caption)
         print("Meme has been fetched")
         if flag == "error":
             return
-        if not was_random:
-            text = message.content[10::]
-        else:
-            text = message.content
+        text = caption
         midpoint = find_space(text)
         text1 = text[0:midpoint]
         text2 = text[midpoint+1::]
-        numimages = os.listdir("src/meme_functionality/images")
         image = "src/meme_functionality/images/temp.jpg"
-        sent = await message.channel.send("Making meme...")
+        sent = await ctx.send("Making meme...")
         try:
             make_meme(text1, text2, image)
         except:
             print("Error making meme, trying again")
             await sent.delete()
-            await shitpost(message, was_random)
+            await shitpost(ctx, caption)
             return
         print("Meme has been made")
-        await message.channel.send(file=discord.File('src/meme_functionality/images/output/output.jpg'))
+        await ctx.send(file=discord.File('src/meme_functionality/images/output/output.jpg'))
         await sent.delete()
 
-# Logic to generate meme
-def make_meme(topString, bottomString, filename):
+def make_meme(top_string, bottom_string, filename):
+    """Logic to generate meme"""
     resize(filename)
     print("Meme is being made")
     img = Image.open(filename)
-    imageSize = img.size
+    image_size = img.size
     # find biggest font size that works
-    fontSize = int(imageSize[1]/5)
-    font = ImageFont.truetype("src/meme_functionality/impact.ttf", fontSize)
-    topTextSize = font.getsize(topString)
-    bottomTextSize = font.getsize(bottomString)
-    while topTextSize[0] > imageSize[0]-20 or bottomTextSize[0] > imageSize[0]-20:
-        fontSize = fontSize - 1
-        font = ImageFont.truetype("src/meme_functionality/impact.ttf", fontSize)
-        topTextSize = font.getsize(topString)
-        bottomTextSize = font.getsize(bottomString)
+    font_size = int(image_size[1]/5)
+    font = ImageFont.truetype("src/meme_functionality/impact.ttf", font_size)
+    top_text_size = font.getsize(top_string)
+    bottom_text_size = font.getsize(bottom_string)
+    while top_text_size[0] > image_size[0]-20 or bottom_text_size[0] > image_size[0]-20:
+        font_size = font_size - 1
+        font = ImageFont.truetype("src/meme_functionality/impact.ttf", font_size)
+        top_text_size = font.getsize(top_string)
+        bottom_text_size = font.getsize(bottom_string)
     # find top centered position for top text
-    topTextPositionX = (imageSize[0]/2) - (topTextSize[0]/2)
-    topTextPositionY = 0
-    topTextPosition = (topTextPositionX, topTextPositionY)
+    top_text_pos_x = (image_size[0]/2) - (top_text_size[0]/2)
+    top_text_pos_y = 0
+    top_text_pos = (top_text_pos_x, top_text_pos_y)
     # find bottom centered position for bottom text
-    bottomTextPositionX = (imageSize[0]/2) - (bottomTextSize[0]/2)
-    bottomTextPositionY = imageSize[1] - bottomTextSize[1]
-    bottomTextPosition = (bottomTextPositionX, bottomTextPositionY)
+    bottom_text_pos_x = (image_size[0]/2) - (bottom_text_size[0]/2)
+    bottom_text_pos_y = image_size[1] - bottom_text_size[1]
+    bottom_text_pos = (bottom_text_pos_x, bottom_text_pos_y)
     draw = ImageDraw.Draw(img)
     # draw outlines
     # there may be a better way
-    outlineRange = int(fontSize/15)
-    for x in range(-outlineRange, outlineRange+1):
-        for y in range(-outlineRange, outlineRange+1):
+    outline_range = int(font_size/15)
+    for x_pos in range(-outline_range, outline_range+1):
+        for y_pos in range(-outline_range, outline_range+1):
             draw.text(
-                (topTextPosition[0]+x, topTextPosition[1]+y), topString, (0, 0, 0), font=font)
+                (top_text_pos[0]+x_pos,
+                 top_text_pos[1]+y_pos),
+                top_string,
+                (0, 0, 0),
+                font=font)
             draw.text(
-                (bottomTextPosition[0]+x, bottomTextPosition[1]+y), bottomString, (0, 0, 0), font=font)
-    draw.text(topTextPosition, topString, (255, 255, 255), font=font)
-    draw.text(bottomTextPosition, bottomString, (255, 255, 255), font=font)
+                (bottom_text_pos[0]+x_pos,
+                 bottom_text_pos[1]+y_pos),
+                bottom_string,
+                (0, 0, 0),
+                font=font)
+    draw.text(top_text_pos, top_string, (255, 255, 255), font=font)
+    draw.text(bottom_text_pos, bottom_string, (255, 255, 255), font=font)
     img.save("src/meme_functionality/images/output/output.jpg", optimize = True, quality = 30)
-
-
-def get_upper(somedata):
-    result = ''
-    try:
-        result = somedata.decode("utf-8").upper()
-    except:
-        result = somedata.upper()
-    return result
-
-
-def get_lower(somedata):
-    result = ''
-    try:
-        result = somedata.decode("utf-8").lower()
-    except:
-        result = somedata.lower()
-    return result

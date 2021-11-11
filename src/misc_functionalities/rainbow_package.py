@@ -1,37 +1,42 @@
-import discord
+"""Helper class for rainbow functions"""
 import random
+import discord
+
 #pick a random user, ensure they arent an admin, make them rainbow
-async def rainbow(message):
-    users = message.guild.members
+async def rainbow(ctx):
+    """Pick a user, and change their role color very quick in rainbow order"""
+    users = ctx.guild.members
     num = random.randint(0, len(users))
     color = users[num].color
-    role = message.guild.get_role(users[num].top_role.id)
+    role = ctx.guild.get_role(users[num].top_role.id)
     if role.permissions.administrator:
         print("is admin")
-        role = message.guild.get_role(users[num].roles[-2].id)
-        await message.channel.send(str(users[num]) + "is now based!")
-        await colorChange(role, color)
+        role = ctx.guild.get_role(users[num].roles[-2].id)
+        await ctx.send(str(users[num]) + "is now based!")
+        await color_change(role, color)
     else:
-        await message.channel.send(str(users[num]) + "is now based!")
-        await colorChange(role, color)
-        
-async def colorChange(role, color):
-    r = 255
-    g = 0
-    b = 0
-    for i in range(100):
-        print(r, g, b)
-        if r == 255 and b == 0 and g != 255:
-            g += 51
-        elif g == 255 and r != 0:
-            r -= 51
-        elif g == 255 and b != 255:
-            b += 51
-        elif b == 255 and g != 0:
-            g -= 51
-        elif b == 255 and r != 255:
-            r += 51
-        elif r == 255 and b != 0:
-            b -= 51
-        await role.edit(colour=discord.Color.from_rgb(r, g, b))
+        await ctx.send(str(users[num]) + "is now based!")
+        await color_change(role, color)
+
+
+async def color_change(role, color):
+    """Helper for the rainbow method"""
+    red = 255
+    green = 0
+    blue = 0
+    for _ in range(100):
+        print(red, green, blue)
+        if red == 255 and blue == 0 and green != 255:
+            green += 51
+        elif green == 255 and red != 0:
+            red -= 51
+        elif green == 255 and blue != 255:
+            blue += 51
+        elif blue == 255 and green != 0:
+            green -= 51
+        elif blue == 255 and red != 255:
+            red += 51
+        elif red == 255 and blue != 0:
+            blue -= 51
+        await role.edit(colour=discord.Color.from_rgb(red, green, blue))
     await role.edit(colour=color)

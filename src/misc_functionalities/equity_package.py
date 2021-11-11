@@ -1,64 +1,74 @@
+"""Helper class for equity related operations"""
 import discord
-async def specificangelo(message, word):
-    if not word:
-        await message.channel.send("Please provide a string")
-        return
-    chan = message.channel
+
+async def specificword(ctx, word):
+    """Counts how many times the user has said a specific word"""
+    chan = ctx.channel
     count = 0
     totalmsg = 0
-    newmsg = await message.channel.send("Counting...")
-    async with message.channel.typing():
+    newmsg = await ctx.send("Counting...")
+    async with ctx.channel.typing():
         async for msg in chan.history(limit=None):
             totalmsg += 1
-            if msg.author == message.author:
+            if msg.author == ctx.author:
                 words = msg.content.split()
                 for i in words:
                     if i.lower() == word.lower():
                         count+=1
         await newmsg.delete()
-    embed = discord.Embed(title="Specific Word Count", description="Counts the number of times a user has said a specific word", color=message.author.color)
-    embed.add_field(name=message.author, value="Has said " + word + " "+  str(count-1) + " many times in " + str(message.channel))
-    embed.set_thumbnail(url=message.author.avatar_url)
+    embed = discord.Embed(title="Specific Word Count",
+                          description="Counts the number of times a user has said a specific word",
+                          color=ctx.author.color)
+    embed.add_field(name=ctx.author,
+                    value="Has said "
+                    + word
+                    + " "
+                    + str(count-1)
+                    + " many times in "
+                    + str(ctx.channel))
+    embed.set_thumbnail(url=ctx.author.avatar_url)
     embed.set_footer(text="Based on " + str(totalmsg) + " messages")
-    await message.channel.send(embed=embed)
+    await ctx.send(embed=embed)
 
-async def angelo(message, id):
-    if id:
-        try:
-            user = await message.guild.fetch_member(id)
-        except:
-            await message.channel.send("No user with given ID in this server")
-            return
-    else:
-        user = message.author
-    chan = message.channel
+async def equity(ctx, user):
+    """Returns the equity of the user"""
+    chan = ctx.channel
     count = 0
     totalmsg = 0
-    newmsg = await message.channel.send("Counting...")
-    async with message.channel.typing():
+    newmsg = await ctx.send("Counting...")
+    async with chan.typing():
         async for msg in chan.history(limit=None):
             totalmsg += 1
             if msg.author == user:
                 count+=1
         await newmsg.delete()
-    embed = discord.Embed(title="Chat Equity", description="Gives the percentage of messages that belong to the user", color=user.color)
-    embed.add_field(name=user, value=user.display_name + " has accounted for " + str((count/totalmsg)*100) + "% of all messages in " + str(message.channel))
+    embed = discord.Embed(title="Chat Equity",
+                          description="Gives the percentage of messages that belong to the user",
+                          color=user.color)
+    embed.add_field(name=user,
+                    value=user.display_name
+                    + " has accounted for "
+                    + str((count/totalmsg)*100)
+                    + "% of all messages in "
+                    + str(ctx.channel))
     embed.set_thumbnail(url=user.avatar_url)
     embed.set_footer(text="Based on " + str(totalmsg) + " messages")
-    await message.channel.send(embed=embed)
+    await ctx.send(embed=embed)
     if user.nick == "Angelo Nelson":
-        await message.channel.edit(topic = "Pretty much just Angelo saying dumb shit " + str((count/totalmsg)*100) + "% of the time")
+        await ctx.channel.edit(topic="Pretty much just Angelo saying dumb shit "
+                               + str((count/totalmsg)*100)
+                               + "% of the time")
 
-async def bigangelo(message):
-    chan = message.channel
+async def bigangelo(ctx):
+    """Calculates the total equity of everyone in the channel"""
+    chan = ctx.channel
     users = {}
-    result = ""
     totalmsg = 0
-    newmsg = await message.channel.send("Counting...")
-    async with message.channel.typing():
+    newmsg = await ctx.send("Counting...")
+    async with ctx.channel.typing():
         async for msg in chan.history(limit=None):
             try:
-                if msg.author.nick == None:
+                if msg.author.nick is None:
                     name = msg.author
                 else:
                     name = msg.author.nick
@@ -71,9 +81,15 @@ async def bigangelo(message):
                 users[name] = users[name] + 1
         sortedusers = dict(sorted(users.items(),key= lambda x:x[1], reverse=True))
         await newmsg.delete()
-        embed = discord.Embed(title="Total Chat Equity for " + str(message.channel), description="Gives the percentage of messages that belong to all users", color=discord.Color.random())
-        for k, v in sortedusers.items():
-            embed.add_field(name=str(k), value="Has accounted for " +str((v/totalmsg)*100) + "% of all messages", inline=False)
+        embed = discord.Embed(title="Total Chat Equity for " + str(ctx.channel),
+                              description="Gives the equity of all users",
+                              color=discord.Color.random())
+        for key, value in sortedusers.items():
+            embed.add_field(name=str(key),
+                            value="Has accounted for "
+                            + str((value/totalmsg)*100)
+                            + "% of all messages",
+                            inline=False)
         embed.set_footer(text="Based on " + str(totalmsg) + " messages")
-    await message.channel.send(embed=embed)
+    await ctx.send(embed=embed)
     
