@@ -82,7 +82,7 @@ async def listbool(ctx):
 @bot.command(name="whois")
 async def whois(ctx, user: discord.Member):
     """
-    Function to look up a user and display their info
+    Takes the given user and looks up information about them
     """
     embed = discord.Embed(title = user.display_name, color=user.color)
     embed.add_field(name="Full Tag:", value=user)
@@ -106,7 +106,7 @@ async def whois_error(ctx, error):
 @bot.command()
 async def equity(ctx, user: discord.Member):
     """
-    Returns the users 'chat equity'
+    Returns the given user's 'chat equity'
     """
     await equity_package.equity(ctx, user)
 
