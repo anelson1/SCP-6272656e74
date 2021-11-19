@@ -71,6 +71,20 @@ async def boolin_error(ctx, error):
     error handler for bool function
     """
     await ctx.send(error)
+    
+@bot.command()
+async def confirmbool(ctx, decision: bool):
+    """
+    Respond to the bool RSVP
+    """
+    await boolin_package.bool_rsvp(ctx, decision, bot)
+
+@confirmbool.error
+async def confirmbool_error(ctx, error):
+    """
+    error handler for confirm function
+    """
+    await ctx.send(error)
 
 @bot.command()
 async def listbool(ctx):

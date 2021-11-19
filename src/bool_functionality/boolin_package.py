@@ -11,46 +11,43 @@ DEV_CHAN_ID = 636978333426384906
 BOOL_ROLE_ID = 855652264663318540
 DEV_ROLE_ID = 760375992513724426
 # Parse message and update JSON file with name and RSVP Status
-async def bool_rsvp(message, client):
+async def bool_rsvp(ctx, decision, bot):
     """Handler for the recieving of bool invites"""
-    if message.content in ("!Y", "!N"):
-        if message.content == "!Y":
-            userdict = {str(message.author): "Yes"}
-            await message.channel.send("You agreed to bool!")
-            embed = discord.Embed(
-                title=message.author,
-                description="Has agreed to bool!",
-                color=discord.Colour.green())
-            embed.set_thumbnail(url=message.author.avatar_url)
-            embed.set_footer(text="Copyright Nelson Net 2021")
-            await client.get_channel(GENERAL_ID).send(embed = embed)
-        if message.content == "!N":
-            userdict = {str(message.author): "No"}
-            embed = discord.Embed(
-                title=message.author,
-                description="Has turned down the offer to bool!",
-                color=discord.Colour.red())
-            embed.set_thumbnail(url=message.author.avatar_url)
-            embed.set_footer(text="Copyright Nelson Net 2021")
-            await client.get_channel(GENERAL_ID).send(embed = embed)
-        invnum = open("src/bool_functionality/invnum.txt").read()
-        try:
-            myfile = open("src/bool_functionality/"+invnum+".json", "r+")
-        except:
-            myfile = open("src/bool_functionality/"+invnum+".json", "w+")
-        content = myfile.read()
-        myfile.close()
-        try:
-            myjson = json.loads(content)
-            myjson.update(userdict)
-            json_string = json.dumps(myjson)
-        except:
-            json_string = json.dumps(userdict)
-        myfile1 = open("src/bool_functionality/"+invnum+".json", "w+")
-        myfile1.write(json_string)
-        myfile1.close()
+    if decision:
+        userdict = {str(ctx.message.author): "Yes"}
+        await ctx.message.channel.send("You agreed to bool!")
+        embed = discord.Embed(
+            title=ctx.message.author,
+            description="Has agreed to bool!",
+            color=discord.Colour.green())
+        embed.set_thumbnail(url=ctx.message.author.avatar_url)
+        embed.set_footer(text="Copyright Nelson Net 2021")
+        await bot.get_channel(GENERAL_ID).send(embed = embed)
     else:
-        await message.channel.send("Please enter !Y or !N please")
+        userdict = {str(ctx.message.author): "No"}
+        embed = discord.Embed(
+            title=ctx.message.author,
+            description="Has turned down the offer to bool!",
+            color=discord.Colour.red())
+        embed.set_thumbnail(url=ctx.message.author.avatar_url)
+        embed.set_footer(text="Copyright Nelson Net 2021")
+        await bot.get_channel(GENERAL_ID).send(embed = embed)
+    invnum = open("src/bool_functionality/invnum.txt").read()
+    try:
+        myfile = open("src/bool_functionality/"+invnum+".json", "r+")
+    except:
+        myfile = open("src/bool_functionality/"+invnum+".json", "w+")
+    content = myfile.read()
+    myfile.close()
+    try:
+        myjson = json.loads(content)
+        myjson.update(userdict)
+        json_string = json.dumps(myjson)
+    except:
+        json_string = json.dumps(userdict)
+    myfile1 = open("src/bool_functionality/"+invnum+".json", "w+")
+    myfile1.write(json_string)
+    myfile1.close()
 
 
 async def bool_send(ctx, dateofbool):
@@ -71,7 +68,7 @@ async def bool_send(ctx, dateofbool):
     datefile = open("src/bool_functionality/booldate.txt", "w+")
     datefile.write(dateofbool)
     datefile.close()
-    role = ctx.message.guild.get_role(BOOL_ROLE_ID)
+    role = ctx.message.guild.get_role(DEV_ROLE_ID)
     try:
         invitenumber = open("src/bool_functionality/invnum.txt", "r").read()
     except:
@@ -88,7 +85,7 @@ async def bool_send(ctx, dateofbool):
         embed.add_field(name = str(ctx.message.author),
                         value = "Would like to bool on "
                         + str(dateofbool)
-                        + ". Please respond with !Y for yes or !N for no.")
+                        + ". Please respond with !confirmbool <yes/no>.")
         embed.set_thumbnail(url=ctx.message.author.avatar_url)
         embed.set_footer(text="Copyright Nelson Net 2021 | " + ctx.message.guild.name)
         await chan.send(embed = embed)
