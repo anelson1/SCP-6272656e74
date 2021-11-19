@@ -68,7 +68,7 @@ async def bool_send(ctx, dateofbool):
     datefile = open("src/bool_functionality/booldate.txt", "w+")
     datefile.write(dateofbool)
     datefile.close()
-    role = ctx.message.guild.get_role(DEV_ROLE_ID)
+    role = ctx.message.guild.get_role(BOOL_ROLE_ID)
     try:
         invitenumber = open("src/bool_functionality/invnum.txt", "r").read()
     except:
