@@ -42,7 +42,7 @@ async def on_ready():
     print(bot.user.name)
     print(bot.user.id)
     print("Booted! Welcome to Based Bot")
-    await bot.change_presence(activity=discord.Game(name="with fate | use !help to get started"))
+    await bot.change_presence(activity=discord.Game(name="with fate"))
 
 @bot.command()
 async def shitpost(ctx, *, caption: str):
@@ -87,11 +87,11 @@ async def confirmbool_error(ctx, error):
     await ctx.send(error)
 
 @bot.command()
-async def listbool(ctx):
+async def listbool(ctx, annoy=False):
     """
     List everyone who agreed to bool
     """
-    await boolin_package.bool_list(ctx)
+    await boolin_package.bool_list(ctx, annoy, bot)
 
 @bot.command(name="whois")
 async def whois(ctx, user: discord.Member):
@@ -164,7 +164,7 @@ async def based(ctx):
     """
     Plays the song 'based' in a voice channel
     """
-    ctx.send("https://open.spotify.com/track/2TogYEdCs90G87y97bOILl?si=PbhZGp-QR3SiWzlrRWyYfg")
+    await ctx.send("https://open.spotify.com/track/2TogYEdCs90G87y97bOILl?si=PbhZGp-QR3SiWzlrRWyYfg")
     voice_channel = ctx.message.author.voice.channel
     connection = await voice_channel.connect(timeout=10)
     connection.play(discord.FFmpegPCMAudio(
