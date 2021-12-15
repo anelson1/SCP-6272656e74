@@ -1,5 +1,5 @@
 """
-Class for all boolin relation functionality
+Class for all gaming relation functionality
 """
 import json
 from datetime import datetime
@@ -12,7 +12,7 @@ DEV_ROLE_ID = 760375992513724426
 # Parse message and update JSON file with name and RSVP Status
 async def game_rsvp(ctx, decision, bot):
     """Handler for the receiving of game requests"""
-    json_file = open('src/bool_functionality/gamingdata.json', 'r')
+    json_file = open('src/game_functionality/gamingdata.json', 'r')
     data = json.load(json_file)
     json_file.close()
     if decision:
@@ -36,7 +36,7 @@ async def game_rsvp(ctx, decision, bot):
         embed.set_footer(text="Copyright Nelson Net 2021 | Sent from " + str(ctx.message.author))
         await bot.get_channel(GENERAL_ID).send(embed = embed)
     data.update(userdict)
-    json_file = open('src/bool_functionality/boolindata.json', 'w')
+    json_file = open('src/game_functionality/gamingdata.json', 'w')
     json.dump(data, json_file)
     json_file.close()
 
@@ -76,7 +76,7 @@ async def game_send(ctx, game):
     json_file = json_file[0:len(json_file)-2]
     json_file += "}"
     data = json.loads(json_file)
-    file = open("src/bool_functionality/gamingdata.json" , 'w')
+    file = open("src/game_functionality/gamingdata.json" , 'w')
     json.dump(data, file)
     file.close()
     print(data)
@@ -85,7 +85,7 @@ async def game_send(ctx, game):
 async def game_list(message, annoy, bot):
     """List people who have RSVPed to game"""
    
-    gamers = open("src/bool_functionality/boolindata.json", "r")
+    gamers = open("src/game_functionality/gamingdata.json", "r")
     gamedict = json.load(gamers)
     game = gamedict['game']
     embed = discord.Embed(title="Gaming List",
