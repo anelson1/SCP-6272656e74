@@ -71,7 +71,7 @@ async def boolin_error(ctx, error):
     error handler for bool function
     """
     await ctx.send(error)
-    
+
 @bot.command()
 async def confirmbool(ctx, decision: bool):
     """
@@ -164,7 +164,8 @@ async def based(ctx):
     """
     Plays the song 'based' in a voice channel
     """
-    await ctx.send("https://open.spotify.com/track/2TogYEdCs90G87y97bOILl?si=PbhZGp-QR3SiWzlrRWyYfg")
+    await ctx.send(
+        "https://open.spotify.com/track/2TogYEdCs90G87y97bOILl?si=PbhZGp-QR3SiWzlrRWyYfg")
     voice_channel = ctx.message.author.voice.channel
     connection = await voice_channel.connect(timeout=10)
     connection.play(discord.FFmpegPCMAudio(
