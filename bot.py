@@ -10,6 +10,7 @@ from discord.ext import commands
 from src.meme_functionality import meme
 from src.bool_functionality import boolin_package
 from src.misc_functionalities import equity_package
+from src.gaming_functionality import game_package
 
 logging.basicConfig(level=logging.INFO)
 
@@ -92,6 +93,41 @@ async def listbool(ctx, annoy=False):
     List everyone who agreed to bool
     """
     await boolin_package.bool_list(ctx, annoy, bot)
+
+@bot.command()
+async def game(ctx, *, game:str):
+    """
+    Send a game request to every member of the 'Gaming' role
+    """
+    await game_package.game_send(ctx, game)
+
+@game.error
+async def game_error(ctx, error):
+    """
+    error handler for game function
+    """
+    await ctx.send(error)
+
+@bot.command()
+async def confirmgame(ctx, decision: bool):
+    """
+    Respond to the bool RSVP
+    """
+    await game_package.game_rsvp(ctx, decision, bot)
+
+@confirmgame.error
+async def confirmgame_error(ctx, error):
+    """
+    error handler for confirm function
+    """
+    await ctx.send(error)
+
+@bot.command()
+async def listgame(ctx, annoy=False):
+    """
+    List everyone who agreed to play the game
+    """
+    await game_package.game_list(ctx, annoy, bot)
 
 @bot.command(name="whois")
 async def whois(ctx, user: discord.Member):

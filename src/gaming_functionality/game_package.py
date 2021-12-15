@@ -23,7 +23,7 @@ async def game_rsvp(ctx, decision, bot):
             description="Has agreed to game!",
             color=discord.Colour.green())
         embed.set_thumbnail(url=ctx.message.author.avatar_url)
-        embed.set_footer(text="Copyright Nelson Net 2021 | Sent from " + ctx.guild.name)
+        embed.set_footer(text="Copyright Nelson Net 2021 | Sent from " + str(ctx.message.author))
         await bot.get_channel(GENERAL_ID).send(embed = embed)
     else:
         userdict = {str(ctx.message.author.id): "N"}
@@ -42,7 +42,8 @@ async def game_rsvp(ctx, decision, bot):
 
 async def game_send(ctx, game):
     """Send RSVPs to game"""
-    GAME_ROLE_ID = await ctx.guild.fetch_roles()["Gaming"]
+    roles = (await ctx.guild.fetch_roles())
+    GAME_ROLE_ID = [x for x in roles if x.name == "Gamers"]
     current_time = datetime.now().strftime("%H:%M:%S")
     current_day = datetime.now().strftime("%m/%d/%y")
     embed = discord.Embed(title="Gaming Request",
@@ -61,7 +62,7 @@ async def game_send(ctx, game):
     for member in role.members:
         json_file += '"' + str(member.id) + '": "NA", '
         chan = await member.create_dm()
-        embed = discord.Embed(title="Gaming Request",
+        embed = discord.Embed(title="A Request to Play " + game,
                               description="Asking the fellas to game",
                               color=ctx.message.author.color)
         embed.add_field(name = str(ctx.message.author),
