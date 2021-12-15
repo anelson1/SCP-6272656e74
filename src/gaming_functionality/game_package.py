@@ -33,7 +33,7 @@ async def game_rsvp(ctx, decision, bot):
             description="Has denied the request to game!",
             color=discord.Colour.red())
         embed.set_thumbnail(url=ctx.message.author.avatar_url)
-        embed.set_footer(text="Copyright Nelson Net 2021 | Sent from " + ctx.guild.name)
+        embed.set_footer(text="Copyright Nelson Net 2021 | Sent from " + str(ctx.message.author))
         await bot.get_channel(GENERAL_ID).send(embed = embed)
     data.update(userdict)
     json_file = open('src/bool_functionality/boolindata.json', 'w')
