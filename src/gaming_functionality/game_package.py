@@ -44,6 +44,7 @@ async def game_send(ctx, game):
     """Send RSVPs to game"""
     roles = (await ctx.guild.fetch_roles())
     GAME_ROLE_ID = [x for x in roles if x.name == "Gamers"]
+    GAME_ROLE_ID = GAME_ROLE_ID[0].id
     current_time = datetime.now().strftime("%H:%M:%S")
     current_day = datetime.now().strftime("%m/%d/%y")
     embed = discord.Embed(title="Gaming Request",
