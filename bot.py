@@ -45,6 +45,19 @@ async def on_ready():
     print("Booted! Welcome to Based Bot")
     await bot.change_presence(activity=discord.Game(name="with fate"))
 
+@bot.event
+async def on_raw_reaction_add(payload):
+    """
+    What happens when a reaction is added to a message
+    """
+    if not payload.user_id == bot.user.id:
+        if payload.event_type == "REACTION_ADD":
+            if str(payload.emoji) == "✅":
+                await boolin_package.bool_rsvp(await bot.fetch_user(payload.user_id), True, bot, True)
+            if str(payload.emoji) == "❌":
+                await boolin_package.bool_rsvp(await bot.fetch_user(payload.user_id), False, bot, True)
+
+
 @bot.command()
 async def shitpost(ctx, *, caption: str):
     """
@@ -78,7 +91,7 @@ async def confirmbool(ctx, decision: bool):
     """
     Respond to the bool RSVP
     """
-    await boolin_package.bool_rsvp(ctx, decision, bot)
+    await boolin_package.bool_rsvp(ctx, decision, bot, False)
 
 @confirmbool.error
 async def confirmbool_error(ctx, error):

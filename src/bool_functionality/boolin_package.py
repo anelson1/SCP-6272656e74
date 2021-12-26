@@ -11,29 +11,35 @@ DEV_CHAN_ID = 636978333426384906
 BOOL_ROLE_ID = 855652264663318540
 DEV_ROLE_ID = 760375992513724426
 # Parse message and update JSON file with name and RSVP Status
-async def bool_rsvp(ctx, decision, bot):
+async def bool_rsvp(ctx, decision, bot, react):
     """Handler for the receiving of bool invites"""
+    if react:
+        booler = ctx
+    else:
+        booler = ctx.message.author
     json_file = open('src/bool_functionality/boolindata.json', 'r')
     data = json.load(json_file)
     json_file.close()
     if decision:
-        userdict = {str(ctx.message.author.id): "Y"}
-        await ctx.message.channel.send("You agreed to bool!")
+        userdict = {str(booler.id): "Y"}
+        if not react:
+            await ctx.message.channel.send("You agreed to bool!")
         embed = discord.Embed(
-            title=ctx.message.author,
+            title=booler,
             description="Has agreed to bool!",
             color=discord.Colour.green())
-        embed.set_thumbnail(url=ctx.message.author.avatar_url)
+        embed.set_thumbnail(url=booler.avatar_url)
         embed.set_footer(text="Copyright Nelson Net 2021")
         await bot.get_channel(GENERAL_ID).send(embed = embed)
     else:
-        userdict = {str(ctx.message.author.id): "N"}
-        await ctx.message.channel.send("You turned down the offer to bool!")
+        userdict = {str(booler.id): "N"}
+        if not react:
+            await ctx.message.channel.send("You turned down the offer to bool!")
         embed = discord.Embed(
-            title=ctx.message.author,
+            title=booler,
             description="Has turned down the offer to bool!",
             color=discord.Colour.red())
-        embed.set_thumbnail(url=ctx.message.author.avatar_url)
+        embed.set_thumbnail(url=booler.avatar_url)
         embed.set_footer(text="Copyright Nelson Net 2021")
         await bot.get_channel(GENERAL_ID).send(embed = embed)
     data.update(userdict)
@@ -56,7 +62,7 @@ async def bool_send(ctx, date_of_bool):
     embed.set_thumbnail(url=ctx.message.author.avatar_url)
     embed.set_footer(text="Copyright Nelson Net 2021 | " + ctx.message.guild.name)
     await ctx.send(embed = embed)
-    role = ctx.message.guild.get_role(BOOL_ROLE_ID)
+    role = ctx.message.guild.get_role(DEV_ROLE_ID)
     json_file = '{"date": "' + date_of_bool +'", '
     for member in role.members:
         json_file += '"' + str(member.id) + '": "NA", '
@@ -67,10 +73,12 @@ async def bool_send(ctx, date_of_bool):
         embed.add_field(name = str(ctx.message.author),
                         value = "Would like to bool on "
                         + str(date_of_bool)
-                        + ". Please respond with !confirmbool <yes/no>.")
+                        + ". Please click one of the reactions below.")
         embed.set_thumbnail(url=ctx.message.author.avatar_url)
         embed.set_footer(text="Copyright Nelson Net 2021 | " + ctx.message.guild.name)
-        await chan.send(embed = embed)
+        msg = await chan.send(embed = embed)
+        await msg.add_reaction("✅")
+        await msg.add_reaction("❌")
     json_file = json_file[0:len(json_file)-2]
     json_file += "}"
     data = json.loads(json_file)
