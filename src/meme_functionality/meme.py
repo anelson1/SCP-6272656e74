@@ -16,10 +16,7 @@ def resize(image):
 
 async def fetch_meme(message):
     """Fetch memes from a cursed image sub-reddit to use with our meme making function"""
-    url_list= ['https://www.reddit.com/r/FunnyCursedImages.json',
-               'https://www.reddit.com/r/blursedimages.json',
-               'https://www.reddit.com/r/MemeTemplatesOfficial.json',
-               'https://www.reddit.com/r/MemeTemplatesIta.json']
+    url_list= ['https://www.reddit.com/r/nocontextpics.json','https://www.reddit.com/r/pics.json']
     response_api = requests.get(random.choice(url_list), headers={'User-agent': 'Based Bot 1.0'})
     if not response_api.ok:
         print("Error", response_api.status_code)
@@ -96,8 +93,18 @@ def make_meme(top_string, bottom_string, filename):
     print("Meme is being made")
     img = Image.open(filename)
     image_size = img.size
-    # find biggest font size that works
-    font_size = int(image_size[1]/5)
+    text_pos = find_text_pos(image_size, int(image_size[1]/5), top_string, bottom_string)    
+    draw = ImageDraw.Draw(img)
+    # draw outlines
+    # there may be a better way
+    draw.text(text_pos[0], top_string, (255, 255, 255), font=text_pos[2], stroke_width=7,
+        stroke_fill=(0,0,0))
+    draw.text(text_pos[1], bottom_string, (255, 255, 255), font=text_pos[2],stroke_width=7,
+        stroke_fill=(0,0,0))
+    img.save("src/meme_functionality/images/output/output.jpg", optimize = True, quality = 30)
+
+def find_text_pos(image_size, font_size, top_string, bottom_string):
+    """Helper function to find correct text pos"""
     font = ImageFont.truetype("src/meme_functionality/impact.ttf", font_size)
     top_text_size = font.getsize(top_string)
     bottom_text_size = font.getsize(bottom_string)
@@ -113,25 +120,5 @@ def make_meme(top_string, bottom_string, filename):
     # find bottom centered position for bottom text
     bottom_text_pos_x = (image_size[0]/2) - (bottom_text_size[0]/2)
     bottom_text_pos_y = image_size[1] - bottom_text_size[1]
-    bottom_text_pos = (bottom_text_pos_x, bottom_text_pos_y)
-    draw = ImageDraw.Draw(img)
-    # draw outlines
-    # there may be a better way
-    outline_range = int(font_size/15)
-    for x_pos in range(-outline_range, outline_range+1):
-        for y_pos in range(-outline_range, outline_range+1):
-            draw.text(
-                (top_text_pos[0]+x_pos,
-                 top_text_pos[1]+y_pos),
-                top_string,
-                (0, 0, 0),
-                font=font)
-            draw.text(
-                (bottom_text_pos[0]+x_pos,
-                 bottom_text_pos[1]+y_pos),
-                bottom_string,
-                (0, 0, 0),
-                font=font)
-    draw.text(top_text_pos, top_string, (255, 255, 255), font=font)
-    draw.text(bottom_text_pos, bottom_string, (255, 255, 255), font=font)
-    img.save("src/meme_functionality/images/output/output.jpg", optimize = True, quality = 30)
+    bottom_text_pos = (bottom_text_pos_x, bottom_text_pos_y * 0.95)
+    return (top_text_pos,bottom_text_pos, font, font_size)
