@@ -101,11 +101,11 @@ async def bool_list(message, annoy, bot):
         if not key == "date":
             key = str(await bot.fetch_user(key))
             if value == "Y":
-                embed.add_field(name = key, value="✅")
+                embed.add_field(name = key, value="✅", inline=False)
             if value == "N":
-                embed.add_field(name=key, value="❌")
+                embed.add_field(name=key, value="❌", inline=False)
             if value == "NA":
-                embed.add_field(name=key, value="❔")
+                embed.add_field(name=key, value="❔", inline=False)
     embed.set_footer(text="Copyright Nelson Net 2021 | " + message.guild.name)
     await message.channel.send(embed = embed)
     if annoy:
