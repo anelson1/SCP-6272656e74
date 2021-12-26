@@ -62,7 +62,7 @@ async def bool_send(ctx, date_of_bool):
     embed.set_thumbnail(url=ctx.message.author.avatar_url)
     embed.set_footer(text="Copyright Nelson Net 2021 | " + ctx.message.guild.name)
     await ctx.send(embed = embed)
-    role = ctx.message.guild.get_role(DEV_ROLE_ID)
+    role = ctx.message.guild.get_role(BOOL_ROLE_ID)
     json_file = '{"date": "' + date_of_bool +'", '
     for member in role.members:
         json_file += '"' + str(member.id) + '": "NA", '
