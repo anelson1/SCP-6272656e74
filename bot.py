@@ -73,7 +73,7 @@ async def shitpost_error(ctx, error):
     await ctx.send(error)
 
 @bot.command(name='bool')
-async def boolin(ctx, dateofbool):
+async def boolin(ctx, *, dateofbool: str):
     """
     Send a RSVP to bool to every member of the 'boolin' role
     """

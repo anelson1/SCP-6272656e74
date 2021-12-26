@@ -97,15 +97,22 @@ async def bool_list(message, annoy, bot):
     embed = discord.Embed(title="Bool List",
                           description="The list of people who were asked to bool on "
                           + date, color=message.author.color)
+    # This is by far the stupidest thing I have ever wrote but AJ wanted it
     for key, value in booldict.items():
         if not key == "date":
             key = str(await bot.fetch_user(key))
             if value == "Y":
-                embed.add_field(name = key, value="✅", inline=False)
+                embed.add_field(name ="✅ " + key, value="---------------------------------------", inline=False)
+    for key,value in booldict.items():
+        if not key == "date":
+            key = str(await bot.fetch_user(key))
             if value == "N":
-                embed.add_field(name=key, value="❌", inline=False)
+                embed.add_field(name="❌ " + key, value="---------------------------------------", inline=False)
+    for key,value in booldict.items():
+        if not key == "date":
+            key = str(await bot.fetch_user(key))
             if value == "NA":
-                embed.add_field(name=key, value="❔", inline=False)
+                embed.add_field(name="❔ " + key, value="---------------------------------------", inline=False)
     embed.set_footer(text="Copyright Nelson Net 2021 | " + message.guild.name)
     await message.channel.send(embed = embed)
     if annoy:
