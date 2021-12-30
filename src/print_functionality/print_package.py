@@ -1,4 +1,5 @@
 """Functionality for all Nelson Net Printing functions"""
+from os import name
 from discord.colour import Color
 import requests
 import discord
@@ -16,21 +17,30 @@ async def fetch_status(ctx):
         color = discord.Color.green()
     else:
         color = discord.Color.red()
-    get_image()
     embed = discord.Embed(
             title="Currently Printing: " + str(jobdata['job']['file']['name']),
             description="Nelson Net Printer is " + str(jobdata['state']),
             color=color)
-    embed.add_field(name = "Progress",
-                        value = str(int(jobdata['progress']['completion']) * 100) + "% finished")
-    embed.add_field(name="Cost", value="$"+str(float((jobdata['job']['filament']['tool0']['length']) / 1000) * 0.06))
-    embed.add_field(name = "Estimated Completion Time",
-                        value = str(float(jobdata['progress']['printTimeLeft']/3600)) + " Hours")
-    embed.add_field(name = "Current Running Time",
-                        value = jobdata['progress']['printTime'])
-    embed.add_field(name = "Extruder Temperature",
-                        value = printerdata['temperature']['tool0']['actual'])
+    if(jobdata['state'] == "Paused" or jobdata['state'] == "Printing"):
+
+        embed.add_field(name = "Progress",
+                            value = str(int(jobdata['progress']['completion']) * 100) + "% finished")
+        embed.add_field(name="Cost", value="$"+str(round(float((jobdata['job']['filament']['tool0']['length'] / 1000) * 0.06),2)))
+        embed.add_field(name = "Estimated Completion Time",
+                            value = str(round(float(jobdata['progress']['printTimeLeft']/3600),2)) + " Hours")
+        embed.add_field(name = "Current Running Time",
+                            value = jobdata['progress']['printTime'])
+        embed.add_field(name = "Extruder Temperature",
+                            value = printerdata['temperature']['tool0']['actual'])
+        try:
+            embed.add_field(name = "Bed Temperature",
+                            value = printerdata['temperature']['tool0']['bed'])
+        except:
+            pass
+    else:
+        embed.add_field(name="No Job is Printing", value="Try again when a job is sent")
     await ctx.send(embed=embed)
+    get_image()
     with open("image.jpg", "rb") as fh:
         f = discord.File(fh, filename="image.jpg")
     await ctx.send(file=f)
