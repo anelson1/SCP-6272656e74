@@ -37,13 +37,16 @@ async def fetch_status(ctx):
                             value = printerdata['temperature']['tool0']['bed'])
         except:
             pass
+        await ctx.send(embed=embed)
+        get_image()
+        with open("image.jpg", "rb") as fh:
+            f = discord.File(fh, filename="image.jpg")
+        await ctx.send(file=f)
     else:
-        embed.add_field(name="No Job is Printing", value="Try again when a job is sent")
-    await ctx.send(embed=embed)
-    get_image()
-    with open("image.jpg", "rb") as fh:
-        f = discord.File(fh, filename="image.jpg")
-    await ctx.send(file=f)
+        embed.add_field(name="No Job is Active", value="Try again when a job is sent")
+        await ctx.send(embed=embed)
+
+   
 
 def get_image():
     stream = cv2.VideoCapture("http://10.0.0.138:8082")
