@@ -11,6 +11,7 @@ from src.meme_functionality import meme
 from src.bool_functionality import boolin_package
 from src.misc_functionalities import equity_package
 from src.gaming_functionality import game_package
+from src.print_functionality import print_package
 
 logging.basicConfig(level=logging.INFO)
 
@@ -263,5 +264,10 @@ async def random(ctx):
         await connection.disconnect()
     else:
         await ctx.send("https://bit.ly/3komZEQ")
+
+@bot.command()
+async def printstatus(ctx):
+    """Returns the current status of a print"""
+    await print_package.fetch_status(ctx)
 
 bot.run(authkey)
