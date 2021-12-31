@@ -29,7 +29,7 @@ async def fetch_status(ctx):
         embed.add_field(name = "Estimated Completion Time",
                             value = str(round(float(jobdata['progress']['printTimeLeft']/3600),2)) + " Hours")
         embed.add_field(name = "Current Running Time",
-                            value = jobdata['progress']['printTime'])
+                            value = str(jobdata['progress']['printTime']) + " seconds")
         embed.add_field(name = "Extruder Temperature",
                             value = printerdata['temperature']['tool0']['actual'])
         try:
