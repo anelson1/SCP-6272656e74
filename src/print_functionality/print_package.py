@@ -27,10 +27,10 @@ async def fetch_status(ctx):
                             value = str(int(jobdata['progress']['completion']) * 100) + "% finished")
         try:
             embed.add_field(name="Cost", value="$"+str(round(float((jobdata['job']['filament']['tool0']['length'] / 1000) * 0.06),2)))
+            embed.add_field(name = "Estimated Completion Time",
+                            value = str(round(float(jobdata['progress']['printTimeLeft']/3600),2)) + " Hours")
         except:
             pass
-        embed.add_field(name = "Estimated Completion Time",
-                            value = str(round(float(jobdata['progress']['printTimeLeft']/3600),2)) + " Hours")
         embed.add_field(name = "Current Running Time",
                             value = str(jobdata['progress']['printTime']) + " seconds")
         embed.add_field(name = "Extruder Temperature",
