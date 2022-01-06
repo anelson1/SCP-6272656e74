@@ -114,7 +114,9 @@ async def bool_list(message, annoy, bot):
             if value == "NA":
                 embed.add_field(name="❔ " + key, value="---------------------------------------", inline=False)
     embed.set_footer(text="Copyright Nelson Net 2021 | " + message.guild.name)
-    await message.channel.send(embed = embed)
+    msg = await message.channel.send(embed = embed)
+    await msg.add_reaction("✅")
+    await msg.add_reaction("❌")
     if annoy:
         for key, value in booldict.items():
             if value == "NA":
