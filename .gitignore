@@ -4,3 +4,4 @@ discordenv/
 .vscode/
 __pycache__/
 boolindata.json
+verifieduser.txt

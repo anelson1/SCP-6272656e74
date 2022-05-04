@@ -55,10 +55,29 @@ async def on_raw_reaction_add(payload):
         if payload.event_type == "REACTION_ADD":
             if str(payload.emoji) == "✅":
                 await boolin_package.bool_rsvp(await bot.fetch_user(payload.user_id), True, bot, True)
-            if str(payload.emoji) == "❌":
+            elif str(payload.emoji) == "❌":
                 await boolin_package.bool_rsvp(await bot.fetch_user(payload.user_id), False, bot, True)
-
-
+            else:
+                chan = bot.get_guild(payload.guild_id).get_channel(payload.channel_id)
+                msg = await chan.fetch_message(payload.message_id)
+                code = 0
+                for i in range((len(msg.reactions))):
+                    print(i, msg.reactions[i])
+                    if i == 0 and str(msg.reactions[i]) == "😎":
+                        code = code + 1
+                    if i == 1 and str(msg.reactions[i]) == "😔":
+                        code = code + 1
+                    if i == 2 and str(msg.reactions[i]) == "😐":
+                        code = code + 1
+                    if i == 3 and str(msg.reactions[i]) == "😈":
+                        code = code + 1
+                    if i == 4 and str(msg.reactions[i]) == "🤠":
+                        code = code + 1
+                if code == 5:
+                    await chan.send("Code Accepted. You can now use the Nuclear Option...")
+                    f = open("verifieduser.txt","w")
+                    f.write(str(payload.user_id))
+                    f.close()
 @bot.command()
 async def shitpost(ctx, *, caption: str):
     """
@@ -261,7 +280,7 @@ async def random(ctx):
             ))
         while connection.is_playing():
             await asyncio.sleep(.1)
-        await connection.disconnect()
+
     else:
         await ctx.send("https://bit.ly/3komZEQ")
 
@@ -271,8 +290,19 @@ async def printstatus(ctx):
     await print_package.fetch_status(ctx)
 
 @bot.command()
-async def annoy(ctx, user: discord.Member):
-    for i in range(69):
-        msg = await ctx.send(user.mention)
-        await msg.delete()
+async def nuclear(ctx, user: discord.Member):
+    """Ping user relentlessly"""
+    f = open("verifieduser.txt", "r")
+    if str(user.id) == f.read():
+        await ctx.send("Authorized. Preparing Strike")
+        for i in range(1):
+            msg = await ctx.send(user.mention)
+            await msg.delete()
+        f.close()
+        f = open("verifieduser.txt", "w")
+        f.write("")
+        f.close()
+    else:
+        await ctx.send("You do not have the authorization to use this command...")
+        f.close()
 bot.run(authkey)
