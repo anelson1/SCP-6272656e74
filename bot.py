@@ -270,4 +270,9 @@ async def printstatus(ctx):
     """Returns the current status of a print"""
     await print_package.fetch_status(ctx)
 
+@bot.command()
+async def annoy(ctx, user: discord.Member):
+    for i in range(69):
+        msg = await ctx.send(user.mention)
+        await msg.delete()
 bot.run(authkey)
