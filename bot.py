@@ -60,7 +60,7 @@ async def on_raw_reaction_add(payload):
             elif str(payload.emoji) == "❌":
                 await boolin_package.bool_rsvp(await bot.fetch_user(payload.user_id), False, bot, True)
             elif payload.emoji.id == 807071047169474610:
-                user = await bot.fetch_user(payload.user_id)
+                user = payload.member
                 guild = msg.guild
                 await user.add_roles(guild.get_role(974090144451809341))
                 embed = discord.Embed(title = user.display_name, description = "is not dead!", color=user.color)
