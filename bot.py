@@ -53,16 +53,23 @@ async def on_raw_reaction_add(payload):
     """
     if not payload.user_id == bot.user.id:
         if payload.event_type == "REACTION_ADD":
+            chan = bot.get_guild(payload.guild_id).get_channel(payload.channel_id)
+            msg = await chan.fetch_message(payload.message_id)
             if str(payload.emoji) == "✅":
                 await boolin_package.bool_rsvp(await bot.fetch_user(payload.user_id), True, bot, True)
             elif str(payload.emoji) == "❌":
                 await boolin_package.bool_rsvp(await bot.fetch_user(payload.user_id), False, bot, True)
+            elif payload.emoji.id == 807071047169474610:
+                user = msg.author
+                guild = msg.guild
+                await user.add_roles(guild.get_role(974090144451809341))
+                embed = discord.Embed(title = user.display_name, description = "is not dead!", color=user.color)
+                embed.set_thumbnail(url=user.avatar_url)
+                embed.set_footer(text=guild.name + " | Nelson Net 2022")
+                await chan.send(embed=embed)
             else:
-                chan = bot.get_guild(payload.guild_id).get_channel(payload.channel_id)
-                msg = await chan.fetch_message(payload.message_id)
                 code = 0
                 for i in range((len(msg.reactions))):
-                    print(i, msg.reactions[i])
                     if i == 0 and str(msg.reactions[i]) == "😎":
                         code = code + 1
                     if i == 1 and str(msg.reactions[i]) == "😔":
