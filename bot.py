@@ -293,9 +293,9 @@ async def printstatus(ctx):
 async def nuclear(ctx, user: discord.Member):
     """Ping user relentlessly"""
     f = open("verifieduser.txt", "r")
-    if str(user.id) == f.read():
+    if str(ctx.author.id) == str(f.read()):
         await ctx.send("Authorized. Preparing Strike")
-        for i in range(1):
+        for i in range(69):
             msg = await ctx.send(user.mention)
             await msg.delete()
         f.close()
