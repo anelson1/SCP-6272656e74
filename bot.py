@@ -1,5 +1,5 @@
 """
-Based Bot for meme generation and bool RSVP handeling.
+Based Bot for meme generation and bool RSVP handling.
 """
 import os
 import asyncio
@@ -54,6 +54,7 @@ async def on_raw_reaction_add(payload):
     if not payload.user_id == bot.user.id:
         if payload.event_type == "REACTION_ADD":
             chan = bot.get_guild(payload.guild_id).get_channel(payload.channel_id)
+            general_chan = bot.get_guild(payload.guild_id).get_channel(423937254046826498)
             msg = await chan.fetch_message(payload.message_id)
             if str(payload.emoji) == "✅":
                 await boolin_package.bool_rsvp(await bot.fetch_user(payload.user_id), True, bot, True)
@@ -66,7 +67,7 @@ async def on_raw_reaction_add(payload):
                 embed = discord.Embed(title = user.display_name, description = "is not dead!", color=user.color)
                 embed.set_thumbnail(url=user.avatar_url)
                 embed.set_footer(text=guild.name + " | Nelson Net 2022")
-                await chan.send(embed=embed)
+                await general_chan.send(embed=embed)
             else:
                 code = 0
                 for i in range((len(msg.reactions))):
