@@ -10,6 +10,7 @@ from discord.ext import commands
 from src.meme_functionality import meme
 from src.bool_functionality import boolin_package
 from src.misc_functionalities import equity_package
+from src.misc_functionalities import dead_package
 from src.gaming_functionality import game_package
 from src.print_functionality import print_package
 
@@ -313,4 +314,9 @@ async def nuclear(ctx, user: discord.Member):
     else:
         await ctx.send("You do not have the authorization to use this command...")
         f.close()
+
+@bot.command()
+async def dead(ctx):
+    await dead_package.dead_check(ctx)
+
 bot.run(authkey)
