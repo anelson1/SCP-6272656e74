@@ -7,6 +7,7 @@ async def dead_check(ctx):
     """Returns when each user messaged last then removes a user if they have not messaged in 1 month"""
     usr_msg = {}
     chan = ctx.channel
+    dead_chan = ctx.guild.get_channel(978836020718080030) 
     new_msg = await ctx.send("Checking the dead...")
     async with ctx.channel.typing():
         async for msg in chan.history(limit=None):
@@ -22,7 +23,7 @@ async def dead_check(ctx):
                     embed = discord.Embed(title = key.display_name, description = "will be killed!", color=key.color)
                     embed.set_thumbnail(url=key.avatar_url)
                     embed.set_footer(text=ctx.guild.name + " | Nelson Net 2022")
-                    await ctx.channel.send(embed=embed)    
+                    await dead_chan.send(embed=embed)    
     await new_msg.delete()
 
 
