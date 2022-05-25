@@ -20,7 +20,7 @@ async def dead_check(ctx):
                     embed.set_thumbnail(url=key.avatar_url)
                     embed.set_footer(text=ctx.guild.name + " | Nelson Net 2022")
                     await ctx.channel.send(embed=embed)    
-
+    await new_msg.delete()
 
 
 
