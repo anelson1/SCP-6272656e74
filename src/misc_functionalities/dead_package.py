@@ -15,7 +15,10 @@ async def dead_check(ctx):
         
         for key, value in usr_msg.items():
                 if (today - value).days > 30:
-                    await key.remove_roles(ctx.guild.get_role(974090144451809341))
+                    try:
+                        await key.remove_roles(ctx.guild.get_role(974090144451809341))
+                    except:
+                        print(key.display_name + " has left the server")
                     embed = discord.Embed(title = key.display_name, description = "will be killed!", color=key.color)
                     embed.set_thumbnail(url=key.avatar_url)
                     embed.set_footer(text=ctx.guild.name + " | Nelson Net 2022")
