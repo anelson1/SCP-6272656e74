@@ -5,16 +5,19 @@ from datetime import datetime
 today = datetime.today()
 async def dead_check(ctx):
     """Returns when each user messaged last then removes a user if they have not messaged in 1 month"""
-    users = ctx.guild.members
+    usr_msg = {}
+    chan = ctx.channel
     new_msg = await ctx.send("Checking the dead...")
     async with ctx.channel.typing():
-        for i in users:
-            last_msg=await ctx.channel.history(limit=None).get(author__name=i.name)
-            if not (last_msg is None):
-                if (today - last_msg.created_at).days > 30:
-                    await i.remove_roles(ctx.guild.get_role(974090144451809341))
-                    embed = discord.Embed(title = i.display_name, description = "will be killed!", color=i.color)
-                    embed.set_thumbnail(url=i.avatar_url)
+        async for msg in chan.history(limit=None):
+            if msg.author not in usr_msg:
+                usr_msg[msg.author] = msg.created_at
+        
+        for key, value in usr_msg.items():
+                if (today - value).days > 30:
+                    await key.remove_roles(ctx.guild.get_role(974090144451809341))
+                    embed = discord.Embed(title = key.display_name, description = "will be killed!", color=key.color)
+                    embed.set_thumbnail(url=key.avatar_url)
                     embed.set_footer(text=ctx.guild.name + " | Nelson Net 2022")
                     await ctx.channel.send(embed=embed)    
 
