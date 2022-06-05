@@ -54,9 +54,12 @@ async def on_raw_reaction_add(payload):
     """
     if not payload.user_id == bot.user.id:
         if payload.event_type == "REACTION_ADD":
-            chan = bot.get_guild(payload.guild_id).get_channel(payload.channel_id)
-            general_chan = bot.get_guild(payload.guild_id).get_channel(423937254046826498)
-            msg = await chan.fetch_message(payload.message_id)
+            try:
+                chan = bot.get_guild(payload.guild_id).get_channel(payload.channel_id)
+                general_chan = bot.get_guild(payload.guild_id).get_channel(423937254046826498)
+                msg = await chan.fetch_message(payload.message_id)
+            except:
+                print("uh oh")
             if str(payload.emoji) == "✅":
                 await boolin_package.bool_rsvp(await bot.fetch_user(payload.user_id), True, bot, True)
             elif str(payload.emoji) == "❌":
