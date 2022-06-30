@@ -1,6 +1,7 @@
 temp.jpg
 output.jpg
 discordenv/
+botenv/
 .vscode/
 __pycache__/
 boolindata.json

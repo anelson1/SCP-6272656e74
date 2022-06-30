@@ -3,6 +3,7 @@ Based Bot for meme generation and bool RSVP handling.
 """
 import os
 import asyncio
+import random
 import logging
 import discord
 from discord.ext import commands
@@ -278,7 +279,7 @@ async def boowomp(ctx):
 
 
 @bot.command()
-async def random(ctx):
+async def randomSound(ctx):
     """
     Plays a unique audio in voice
     """
@@ -321,5 +322,13 @@ async def nuclear(ctx, user: discord.Member):
 @bot.command()
 async def dead(ctx):
     await dead_package.dead_check(ctx)
+
+@bot.command()
+async def pog(ctx):
+    """Sends a Pog"""
+    pog_list = [991869057085231195, 777033116107407390, 991872892977557504, 991872896899240017, 991876332952760380,807071047169474610]
+    randomEmoji = random.choice((pog_list))
+    emoji = ctx.bot.get_emoji(randomEmoji)
+    await ctx.send(emoji)
 
 bot.run(authkey)
