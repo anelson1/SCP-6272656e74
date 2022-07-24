@@ -61,11 +61,7 @@ async def on_raw_reaction_add(payload):
                 msg = await chan.fetch_message(payload.message_id)
             except:
                 print("uh oh")
-            if str(payload.emoji) == "✅":
-                await boolin_package.bool_rsvp(await bot.fetch_user(payload.user_id), True, bot, True)
-            elif str(payload.emoji) == "❌":
-                await boolin_package.bool_rsvp(await bot.fetch_user(payload.user_id), False, bot, True)
-            elif payload.emoji.id == 807071047169474610:
+            if payload.emoji.id == 807071047169474610:
                 user = payload.member
                 guild = msg.guild
                 await user.add_roles(guild.get_role(974090144451809341))
@@ -104,41 +100,6 @@ async def shitpost_error(ctx, error):
     Error handler for the shitposting function
     """
     await ctx.send(error)
-
-@bot.command(name='bool')
-async def boolin(ctx, *, dateofbool: str):
-    """
-    Send a RSVP to bool to every member of the 'boolin' role
-    """
-    await boolin_package.bool_send(ctx, dateofbool)
-
-@boolin.error
-async def boolin_error(ctx, error):
-    """
-    error handler for bool function
-    """
-    await ctx.send(error)
-
-@bot.command()
-async def confirmbool(ctx, decision: bool):
-    """
-    Respond to the bool RSVP
-    """
-    await boolin_package.bool_rsvp(ctx, decision, bot, False)
-
-@confirmbool.error
-async def confirmbool_error(ctx, error):
-    """
-    error handler for confirm function
-    """
-    await ctx.send(error)
-
-@bot.command()
-async def listbool(ctx, annoy=False):
-    """
-    List everyone who agreed to bool
-    """
-    await boolin_package.bool_list(ctx, annoy, bot)
 
 @bot.command()
 async def game(ctx, *, game:str):
